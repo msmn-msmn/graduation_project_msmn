@@ -232,7 +232,8 @@ Trelloは画面遷移が少なく直感的に扱えてカスタマイズも豊�
 # ■ 機能の実装方針予定
 ## ＜開発環境＞
 ```
-使用言語：　　　　Ruby on Rails　7.0
+使用言語：　　　　Ruby 3.3.6
+フレームワーク：　Ruby on Rails　7.2.2
 DB：　　　　　　　PostgreSQL　16.8
 デプロイサーバー：Render
 ```
@@ -242,8 +243,8 @@ DB：　　　　　　　PostgreSQL　16.8
 ## ＜MVP機能＞
 ### ・ユーザー登録機能とログイン/ログアウト機能
 ```
-gem 'devise'
-gem 'omniauth'
+gem 'devise' 4.0
+gem 'omniauth' 2.1.2
 gem 'omniauth-google-oauth2'
 gem 'omniauth-rails_csrf_protection'
 ```
@@ -253,15 +254,15 @@ gem 'omniauth-rails_csrf_protection'
 
 ### ・タスク　→　小タスク分解機能
 ```
-gem 'ruby-openai'
+gem 'ruby-openai' 5.1.0
 ```
 とOpenAI API で入力内容から小タスクに分解した結果をユーザーが編集できる機能を実装<br>
 <br>
 
 ### ・計画の振り返り機能
 ```
-gem 'ice_cube'
-gem 'ultimate_turbo_modal'
+gem 'ice_cube' 0.17.0
+gem 'ultimate_turbo_modal' 2.0.0
 ```
 で指定期間ごとに振り返りタスクのモーダルが発生する機能を実装<br>
 <br>
@@ -270,7 +271,7 @@ gem 'ultimate_turbo_modal'
 ## ＜本リリース機能＞
 ### ・ユーザーの可処分時間に対してのタスクの占有率表示機能
 ```
-gem 'progress_bar_tag'
+gem 'Bootstrap' 5.3.0
 ```
 を使って進捗バー形式で占有率を表現する<br>
 <br>
@@ -285,7 +286,7 @@ ActionMailer + Active Jobで設定日時にメールでお知らせ<br>
 
 ### ・タスク検索機能
 ```
-gem 'ransac'
+gem 'ransac' 4.3.0
 gem 'kaminari'
 ```
 で検索機能、ページネイトを実装<br>
