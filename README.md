@@ -294,4 +294,4 @@ gem 'kaminari'
 <br>
 
 ## 画面遷移図
-https://drive.google.com/file/d/1Z3onu0DfgAKxkluIMDc_5GqIVkPHK00b/view?usp=drive_link
+https://drive.google.com/file/d/1qLjdbRpIde25EwnERdEXb_MH4i10bQzl/view?usp=drive_link
