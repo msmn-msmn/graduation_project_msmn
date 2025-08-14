@@ -290,7 +290,8 @@ gem 'ransack' 4.3.0
 gem 'kaminari'
 ```
 で検索機能、ページネイトを実装<br>
+<br>
+<br>
 
-
-
-
+## 画面遷移図
+https://drive.google.com/file/d/18B7OD2gR7vVvVZ1OXbLGSbupuYlA_bMu/view?usp=drive_link
