@@ -1,0 +1,9 @@
+{
+    "plantuml.commandArgs": [
+        "-Xmx2g",
+        "-DPLANTUML_LIMIT_SIZE=16384"
+    ],
+    "plantuml.render": "PlantUMLServer",
+    "plantuml.server": "http://localhost:8080",
+    "plantuml.lintDiagramNoName": false
+}
