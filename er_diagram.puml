@@ -36,7 +36,6 @@
     *id : integer <<PK>>
     --
     *user_id : integer <<FK>>
-    *milestone_id : integer, null: true <<FK>>
     *name : string, null: false
     *description_for_ai : text  /'AI用備考'/
     *user_memo : text
@@ -60,11 +59,14 @@
     *user_id : integer <<FK>>
     *task_id : integer <<FK>>
     *name : string, null: false
+    *step_name : string
     *status : integer, default: 0   /'進行管理enum用'/
     *priority : integer, default: 0   /'表示順位enum用'/
     *sub_work_time : integer  /'実際作業時間'/
     *sub_due_date : datetime  /'小タスクの締切日'/
     *completed_at : datetime  /'小タスクの完了日'/
+    *step_due_date : datetime  /'小タスクのステップの締切日'/
+    *step_completed_at : datetime  /'小タスクのステップの完了日'/
     *created_at : datetime
     *updated_at : datetime
   }
@@ -89,8 +91,10 @@
     *id : integer <<PK>>
     --
     *user_id : integer <<FK>>
+    *task_id : integer <<FK>>
     *name : string, null: false
     *milestone_status : integer, default: 0   /'進行管理enum用'/
+    *progress_rate : integer  /'進捗率（%）'/
     *target_date : datetime   /'締切'/
     *created_at : datetime
     *updated_at : datetime
@@ -137,8 +141,7 @@
   Users ||--o{ Memos
   Users ||--o{ Reminders
   Tasks ||--o{ SubTasks
+  Tasks ||--|| Milestones
   Tasks ||--o{ Memos
   Tasks ||--o{ ReviewTasks
-  SubTasks ||--o{ Reminders
-  Milestones ||--o{ Tasks
   @enduml
