@@ -19,7 +19,7 @@
     *updated_at : datetime
   }
 
-  entity "UserAuthentications" {
+  entity "UserAuthentications" {  /'認証管理用'/
     *id : integer <<PK>>
     --
     *user_id : integer <<FK>>
@@ -32,16 +32,16 @@
     *updated_at : datetime
   }
 
-  entity "Tasks" {
+  entity "Tasks" {  /'タスク管理'/
     *id : integer <<PK>>
     --
     *user_id : integer <<FK>>
     *name : string, null: false
-    *description_for_ai : text  /'AI用備考'/
+    *description_for_ai : text  /'AI用説明文'/
     *user_memo : text
     *status : integer, default: 0   /'進行管理enum用'/
     *priority : integer, default: 0   /'表示優先順位enum用'/
-    *daily_task_time : integer, null: false  /'1日のタスク時間'/
+    *daily_task_time : integer, null: false  /'1日のタスクに使える時間'/
     *estimate_min_days : integer, null: false  /'完了見積最短'/
     *estimate_normal_days : integer, null: false  /'完了見積普通'/
     *estimate_max_days : integer, null: false  /'完了見積最大'/
@@ -53,7 +53,7 @@
     *updated_at : datetime
   }
 
-  entity "SubTasks" {
+  entity "SubTasks" {  /'小タスク管理'/
     *id : integer <<PK>>
     --
     *user_id : integer <<FK>>
@@ -71,7 +71,7 @@
     *updated_at : datetime
   }
 
-  entity "Reminders" {
+  entity "Reminders" {  /'リマインダー機能'/
      *id : integer <<PK>>
     --
     *user_id : integer <<FK>>
@@ -87,7 +87,7 @@
     *updated_at : datetime
   }
 
-  entity "Milestones" {
+  entity "Milestones" {  /'マイルストーン機能'/
     *id : integer <<PK>>
     --
     *user_id : integer <<FK>>
@@ -100,7 +100,7 @@
     *updated_at : datetime
   }
 
-  entity "Memos" {
+  entity "Memos" {  /'メモ機能'/
     *id : integer <<PK>>
     --
     *user_id : integer <<FK>>
@@ -111,22 +111,22 @@
     *updated_at : datetime
   }
 
-  entity "ReviewTasks" {  /'振り返りタスク'/
+  entity "ReviewTasks" {  /'振り返りタスク管理'/
     *id : integer <<PK>>
     --
     *user_id : integer <<FK>>
     *task_id : integer <<FK>>
     *title : string, null: false
-    *description : text
+    *description : text   /'備考'/
     *due_date : datetime   /'締切'/
     *review_period_start : date  /'レビュー対象期間開始'/
     *review_period_end : date  /'レビュー対象期間終了'/
     *status : integer, default: 0   /'進行管理enum用'/
     *progress_rate : decimal(5,2)  /'進捗率（%）'/
-    *is_on_schedule : boolean   /'予定通りか'/
+    *is_on_schedule : boolean   /'予定通りかのフラグ'/
     *feedback : text  /'振り返り内容'/
     *next_week_plan : text  /'来週の計画'/
-    *auto_generated : boolean, default: true  /'自動生成フラグ'/ 
+    *is_auto_generated : boolean, default: true  /'自動生成フラグ'/ 
     *completed_at : datetime  /'タスクの完了日'/
     *created_at : datetime
     *updated_at : datetime
@@ -144,4 +144,10 @@
   Tasks ||--|| Milestones
   Tasks ||--o{ Memos
   Tasks ||--o{ ReviewTasks
+  Reminders ..> Tasks
+  Reminders ..> SubTasks
+  Reminders ..> Milestones
+
+  Users -[hidden]- UserAuthentications
+
   @enduml
