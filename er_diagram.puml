@@ -1,0 +1,153 @@
+@startuml
+ entity "Users" {
+    *id : integer <<PK>>
+    --
+    *username : string, null: false
+    *email : string, null: false, unique: true
+    *daily_available_time : integer  /'1日の可処分時間'/
+    *encrypted_password : string, null: false
+/'devise関連カラムここから'/      
+    *reset_password_token : string  /'パスワードリセット時の一意識別トークン'/
+    *reset_password_sent_at : datetime  /'パスワードリセットトークンの有効期限管理'/
+    *remember_created_at : datetime  /'「ログイン状態を記憶する」機能の管理'/
+    *confirmation_token : string  /'メール確認用の一意識別トークン'/
+    *confirmed_at : datetime  /'メールアドレス確認が完了した日時を記録'/
+    *confirmation_sent_at : datetime  /' 確認メールの送信日時を記録（有効期限管理・重複送信防止）'/
+    *unconfirmed_email : string  /'メールアドレス変更時の新しいメールアドレスを一時保存'/
+/'devise関連カラムここまで'/  
+    *created_at : datetime
+    *updated_at : datetime
+  }
+
+  entity "UserAuthentications" {  /'認証管理用'/
+    *id : integer <<PK>>
+    --
+    *user_id : integer <<FK>>
+    *provider : string, null: false   /'認証プロバイダー'/
+    *uid : string, null: false   /'ユーザー識別子'/
+    *access_token : string   /'外部APIにアクセスするためのトークン'/
+    *refresh_token : string   /'access_tokenが期限切れになった時に新しいトークンを取得'/
+    *expires_at : datetime   /'認証有効期限'/
+    *created_at : datetime
+    *updated_at : datetime
+  }
+
+  entity "Tasks" {  /'タスク管理'/
+    *id : integer <<PK>>
+    --
+    *user_id : integer <<FK>>
+    *name : string, null: false
+    *description_for_ai : text  /'AI用説明文'/
+    *user_memo : text
+    *status : integer, default: 0   /'進行管理enum用'/
+    *priority : integer, default: 0   /'表示優先順位enum用'/
+    *daily_task_time : integer, null: false  /'1日のタスクに使える時間'/
+    *estimate_min_days : integer, null: false  /'完了見積最短'/
+    *estimate_normal_days : integer, null: false  /'完了見積普通'/
+    *estimate_max_days : integer, null: false  /'完了見積最大'/
+    *calculated_estimated_days : integer  /'算出見積時間'/
+    *work_time : integer  /'実際作業時間'/
+    *due_date : datetime  /'タスクの締切日'/
+    *completed_at : datetime, null: true  /'タスクの完了日'/
+    *created_at : datetime
+    *updated_at : datetime
+  }
+
+  entity "SubTasks" {  /'小タスク管理'/
+    *id : integer <<PK>>
+    --
+    *user_id : integer <<FK>>
+    *task_id : integer <<FK>>
+    *name : string, null: false
+    *step_name : string
+    *status : integer, default: 0   /'進行管理enum用'/
+    *priority : integer, default: 0   /'表示順位enum用'/
+    *sub_work_time : integer  /'実際作業時間'/
+    *sub_due_date : datetime  /'小タスクの締切日'/
+    *completed_at : datetime  /'小タスクの完了日'/
+    *step_due_date : datetime  /'小タスクのステップの締切日'/
+    *step_completed_at : datetime  /'小タスクのステップの完了日'/
+    *created_at : datetime
+    *updated_at : datetime
+  }
+
+  entity "Reminders" {  /'リマインダー機能'/
+     *id : integer <<PK>>
+    --
+    *user_id : integer <<FK>>
+　　/'ポリモーフィック関連系カラムここから'/
+    *remindable_type : string  /'リマインド対象のモデル名'/
+    *remindable_id : integer  /'リマインド対象のID'/
+    /'ポリモーフィック関連系カラムここまで'/
+    *message : text  /'通知本文'/
+    *status : integer, default: 0  /'送信管理enum用'/
+    *remind_at : datetime  /'通知日時'/
+    *sent_at : datetime  /'送信日時'/
+    *created_at : datetime
+    *updated_at : datetime
+  }
+
+  entity "Milestones" {  /'マイルストーン機能'/
+    *id : integer <<PK>>
+    --
+    *user_id : integer <<FK>>
+    *task_id : integer <<FK>>
+    *name : string, null: false
+    *milestone_status : integer, default: 0   /'進行管理enum用'/
+    *progress_rate : integer  /'進捗率（%）'/
+    *target_date : datetime   /'締切'/
+    *created_at : datetime
+    *updated_at : datetime
+  }
+
+  entity "Memos" {  /'メモ機能'/
+    *id : integer <<PK>>
+    --
+    *user_id : integer <<FK>>
+    *task_id : integer <<FK>>  # nullable
+    *title : string
+    *content : text, null: false
+    *created_at : datetime
+    *updated_at : datetime
+  }
+
+  entity "ReviewTasks" {  /'振り返りタスク管理'/
+    *id : integer <<PK>>
+    --
+    *user_id : integer <<FK>>
+    *task_id : integer <<FK>>
+    *title : string, null: false
+    *description : text   /'備考'/
+    *due_date : datetime   /'締切'/
+    *review_period_start : date  /'レビュー対象期間開始'/
+    *review_period_end : date  /'レビュー対象期間終了'/
+    *status : integer, default: 0   /'進行管理enum用'/
+    *progress_rate : decimal(5,2)  /'進捗率（%）'/
+    *is_on_schedule : boolean   /'予定通りかのフラグ'/
+    *feedback : text  /'振り返り内容'/
+    *next_week_plan : text  /'来週の計画'/
+    *is_auto_generated : boolean, default: true  /'自動生成フラグ'/ 
+    *completed_at : datetime  /'タスクの完了日'/
+    *created_at : datetime
+    *updated_at : datetime
+  }
+
+
+  Users ||--o{ UserAuthentications
+  Users ||--o{ Tasks
+  Users ||--o{ SubTasks
+  Users ||--o{ Milestones
+  Users ||--o{ ReviewTasks
+  Users ||--o{ Memos
+  Users ||--o{ Reminders
+  Tasks ||--o{ SubTasks
+  Tasks ||--|| Milestones
+  Tasks ||--o{ Memos
+  Tasks ||--o{ ReviewTasks
+  Reminders ..> Tasks
+  Reminders ..> SubTasks
+  Reminders ..> Milestones
+
+  Users -[hidden]- UserAuthentications
+
+  @enduml

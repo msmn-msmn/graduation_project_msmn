@@ -243,7 +243,7 @@ DB：　　　　　　　PostgreSQL　16.8
 ## ＜MVP機能＞
 ### ・ユーザー登録機能とログイン/ログアウト機能
 ```
-gem 'devise' 4.0
+gem 'devise' ~> 4.9.4
 gem 'omniauth' 2.1.2
 gem 'omniauth-google-oauth2'
 gem 'omniauth-rails_csrf_protection'
