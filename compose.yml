@@ -5,7 +5,9 @@ services:
     platform: linux/amd64
     environment:
       TZ: Asia/Tokyo
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
+      POSTGRES_DB: app_development
     volumes:
       # DBのデータをPC側に永続化し、コンテナを消してもデータが消えないようにする
       - postgres_data:/var/lib/postgresql/data
@@ -14,7 +16,7 @@ services:
       - "5433:5432"
     # ヘルスチェック
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d app_development"]
       interval: 10s
       timeout: 5s
       retries: 5
