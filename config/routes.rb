@@ -1,6 +1,15 @@
 Rails.application.routes.draw do
+  devise_for :users,
+  path: "",
+  path_names: {
+    sign_in: "login",
+    sign_out: "logout",
+    sign_up: "signup"
+  }
+
+  resources :users, only: %i[index show edit update destroy] # new,createはDeviseから提供される
+
   root to: "static_pages#index"
-  get "static_pages/index"
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
