@@ -4,8 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  validates :username, presence: true, uniqueness: true
-  validates :username, length: { minimum: 3, maximum: 20 }
+  validates :username, presence: true, uniqueness: true, length: { minimum: 3, maximum: 20 }
 
   validates :daily_available_time, presence: true
   validates :daily_available_time, numericality: { greater_than_or_equal_to: 0, only_integer: true } # 正の整数であること
