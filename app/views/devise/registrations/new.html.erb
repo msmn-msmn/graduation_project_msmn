@@ -1,29 +1,111 @@
-<h2>Sign up</h2>
+<!-- app/views/devise/registrations/new.html.erb -->
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h2 class="text-center mb-0">
+            <i class="fas fa-user-plus me-2"></i>新規登録
+          </h2>
+        </div>
+        <div class="card-body p-4">
+          <%= form_for(resource, as: resource_name, url: registration_path(resource_name), local: true, html: { class: "needs-validation", novalidate: true }) do |f| %>
+            
+            <!-- エラーメッセージ -->
+            <%= render "devise/shared/error_messages", resource: resource %>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+            <!-- メールアドレス -->
+            <div class="mb-3">
+              <%= f.label :email, "メールアドレス", class: "form-label" %>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="fas fa-envelope"></i>
+                </span>
+                <%= f.email_field :email, 
+                    autofocus: true, 
+                    autocomplete: "email", 
+                    class: "form-control",
+                    placeholder: "example@email.com",
+                    required: true %>
+              </div>
+            </div>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+            <!-- パスワード -->
+            <div class="mb-3">
+              <%= f.label :password, "パスワード", class: "form-label" %>
+              <% if @minimum_password_length %>
+                <small class="text-muted">
+                  （<%= @minimum_password_length %>文字以上）
+                </small>
+              <% end %>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="fas fa-lock"></i>
+                </span>
+                <%= f.password_field :password, 
+                    autocomplete: "new-password", 
+                    class: "form-control",
+                    placeholder: "パスワードを入力",
+                    required: true %>
+                <button class="btn btn-outline-secondary" type="button" id="passwordToggle">
+                  <i class="fas fa-eye" id="passwordIcon"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- パスワード確認 -->
+            <div class="mb-4">
+              <%= f.label :password_confirmation, "パスワード確認", class: "form-label" %>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="fas fa-lock"></i>
+                </span>
+                <%= f.password_field :password_confirmation, 
+                    autocomplete: "new-password", 
+                    class: "form-control",
+                    placeholder: "パスワードを再入力",
+                    required: true %>
+              </div>
+            </div>
+
+            <!-- 登録ボタン -->
+            <div class="d-grid mb-3">
+              <%= f.submit "アカウントを作成", 
+                  class: "btn btn-primary btn-lg",
+                  data: { 
+                    disable_with: '<i class="fas fa-spinner fa-spin me-2"></i>登録中...' 
+                  } %>
+            </div>
+          <% end %>
+
+          <!-- リンク -->
+          <div class="text-center">
+            <%= render "devise/shared/links" %>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+</div>
 
-  <div class="field">
-    <%= f.label :password %>
-    <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Sign up" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+<!-- パスワード表示切り替えのJavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const passwordToggle = document.getElementById('passwordToggle');
+  const passwordField = document.querySelector('input[name="user[password]"]');
+  const passwordIcon = document.getElementById('passwordIcon');
+  
+  if (passwordToggle && passwordField && passwordIcon) {
+    passwordToggle.addEventListener('click', function() {
+      const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordField.setAttribute('type', type);
+      
+      if (type === 'password') {
+        passwordIcon.className = 'fas fa-eye';
+      } else {
+        passwordIcon.className = 'fas fa-eye-slash';
+      }
+    });
+  }
+});
+</script>
