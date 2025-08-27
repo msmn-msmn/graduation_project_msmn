@@ -1,0 +1,75 @@
+<div class="auth-links mt-4">
+  
+  <%- if controller_name != 'sessions' %>
+    <div class="text-center mb-3">
+      <div class="d-flex align-items-center justify-content-center mb-2">
+        <i class="fas fa-sign-in-alt text-primary me-2"></i>
+        <span class="text-muted">既にアカウントをお持ちの方</span>
+      </div>
+      <%= link_to "ログイン", new_session_path(resource_name), 
+          class: "btn btn-outline-primary btn-sm px-4" %>
+    </div>
+  <% end %>
+
+  <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
+    <div class="text-center mb-3">
+      <div class="d-flex align-items-center justify-content-center mb-2">
+        <i class="fas fa-user-plus text-success me-2"></i>
+        <span class="text-muted">初めてご利用の方</span>
+      </div>
+      <%= link_to "新規登録", new_registration_path(resource_name), 
+          class: "btn btn-outline-success btn-sm px-4" %>
+    </div>
+  <% end %>
+
+  <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+    <div class="text-center mb-3">
+      <hr class="my-3">
+      <div class="d-flex align-items-center justify-content-center">
+        <i class="fas fa-key text-warning me-2"></i>
+        <%= link_to "パスワードをお忘れの方はこちら", new_password_path(resource_name), 
+            class: "text-decoration-none text-warning fw-bold small" %>
+      </div>
+    </div>
+  <% end %>
+
+  <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
+    <div class="text-center mb-2">
+      <div class="d-flex align-items-center justify-content-center">
+        <i class="fas fa-envelope text-info me-2"></i>
+        <%= link_to "確認メールを再送信", new_confirmation_path(resource_name), 
+            class: "text-decoration-none text-info small" %>
+      </div>
+    </div>
+  <% end %>
+
+  <%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
+    <div class="text-center mb-2">
+      <div class="d-flex align-items-center justify-content-center">
+        <i class="fas fa-unlock text-secondary me-2"></i>
+        <%= link_to "アカウントロック解除", new_unlock_path(resource_name), 
+            class: "text-decoration-none text-secondary small" %>
+      </div>
+    </div>
+  <% end %>
+
+  <%- if devise_mapping.omniauthable? %>
+    <hr class="my-4">
+    <div class="text-center">
+      <p class="text-muted mb-3">
+        <i class="fas fa-share-alt me-2"></i>
+        SNSアカウントでログイン
+      </p>
+      <%- resource_class.omniauth_providers.each do |provider| %>
+        <div class="mb-2">
+          <%= button_to "#{provider_name(provider)}でログイン", 
+              omniauth_authorize_path(resource_name, provider), 
+              data: { turbo: false }, 
+              class: "btn #{provider_button_class(provider)} btn-sm w-100",
+              style: "max-width: 250px;" %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+</div>
