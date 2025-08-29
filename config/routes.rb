@@ -11,6 +11,10 @@ Rails.application.routes.draw do
   resources :tasks  # 全アクション使用のため省略形
 
   root to: "static_pages#index"
+
+  # ログイン後のメインページ（認証が必要）
+  get "/dashboard", to: "tasks#index", as: :user_root
+
   get "static_pages/index"
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
