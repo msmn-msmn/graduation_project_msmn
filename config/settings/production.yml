@@ -1,0 +1,3 @@
+default_url_options:
+  host: 'graduation-project-msmn.onrender.com'  # Renderのドメイン
+  protocol: 'https'

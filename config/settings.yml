@@ -1,0 +1,8 @@
+default_url_options: &default_url_options
+  protocol: 'https'  # URLに https:// を使う
+
+mailer: &mailer_settings
+  from: 'cat_hand_schedule@renderapp.com'  # 送信者（From）アドレスを指定(任意) 
+
+<<: *default_url_options
+<<: *mailer_settings

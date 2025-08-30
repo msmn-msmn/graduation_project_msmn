@@ -24,8 +24,8 @@ Devise.setup do |config|
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  # 送信者のメールアドレス
-  config.mailer_sender = "app@your.com"
+  # Deviseが送るメールの差出人を設定
+  config.mailer_sender = Settings.mailer.from
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
@@ -144,7 +144,7 @@ Devise.setup do |config|
   # without confirming their account.
   # Default is 0.days, meaning the user cannot access the website without
   # confirming their account.
-  # メールの確認済みでない場合のアクセス可能期間
+  # メール未確認状態でもログインを許可する期間
   config.allow_unconfirmed_access_for = 0.days
 
   # A period that the user is allowed to confirm their account before their
@@ -153,7 +153,7 @@ Devise.setup do |config|
   # their account can't be confirmed with the token any more.
   # Default is nil, meaning there is no restriction on how long a user can take
   # before confirming their account.
-  # 確認メールの有効期限
+  # 確認メールのリンク有効期限
   config.confirm_within = 3.days
 
   # If true, requires any email changes to be confirmed (exactly the same way as
@@ -227,6 +227,7 @@ Devise.setup do |config|
   # Time interval you can reset your password with a reset password key.
   # Don't put a too small interval or your users won't have the time to
   # change their passwords.
+  # パスワード再設定リンクの有効期間
   config.reset_password_within = 6.hours
 
   # When set to false, does not sign a user in automatically after their password is
