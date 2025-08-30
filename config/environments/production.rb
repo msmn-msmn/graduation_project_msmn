@@ -88,12 +88,12 @@ Rails.application.configure do
 
   # Gmail SMTP設定
   config.action_mailer.smtp_settings = {
-    address: 'smtp.gmail.com',
+    address: "smtp.gmail.com",
     port: 587,
     domain: Settings.default_url_options.host,
-    user_name: ENV['GMAIL_USERNAME'],
-    password: ENV['GMAIL_PASSWORD'],  # アプリパスワード
-    authentication: 'plain',
+    user_name: ENV["GMAIL_USERNAME"],
+    password: ENV["GMAIL_PASSWORD"],  # アプリパスワード
+    authentication: "plain",
     enable_starttls_auto: true,
     open_timeout: 10,
     read_timeout: 10
@@ -104,7 +104,7 @@ Rails.application.configure do
     host: Settings.default_url_options.host,
     protocol: Settings.default_url_options.protocol
   }
-  
+
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true
