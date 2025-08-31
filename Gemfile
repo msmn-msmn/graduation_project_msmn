@@ -65,6 +65,8 @@ group :development, :test do
   gem "binding_of_caller"
 
   gem "bundler-audit", require: false
+
+  gem "dotenv-rails"
 end
 
 group :development do
