@@ -10,7 +10,7 @@ class SubTask < ApplicationRecord
   validate :belongs_to_same_user
   validate :sub_due_date_not_in_past
 
-   # enum定義
+  # enum定義
   enum status: {
     not_started: 0,    # 未着手
     in_progress: 1,    # 進行中
@@ -20,23 +20,23 @@ class SubTask < ApplicationRecord
   }
 
   enum priority: {
-    first: 0,          # 1番目
-    second: 1,         # 2番目
-    third: 2,          # 3番目
-    fourth: 3          # 4番目
+    position_1: 0,     # 1段目
+    position_2: 1,     # 2段目
+    position_3: 2,     # 3段目
+    position_4: 3      # 4段目
   }
 
   # スコープ
   scope :by_priority, -> { order(:priority) }
   scope :by_due_date, -> { order(:sub_due_date) }
-  scope :pending, -> { where(status: [:not_started, :in_progress, :on_hold]) }
-  scope :overdue, -> { where('sub_due_date < ? AND status != ?', Time.current, statuses[:completed]) }
+  scope :pending, -> { where(status: [ :not_started, :in_progress, :on_hold ]) }
+  scope :overdue, -> { where("sub_due_date < ? AND status != ?", Time.current, statuses[:completed]) }
 
   # コールバック
   before_save :set_completed_at, if: :will_save_change_to_status?
   before_save :clear_completed_at, unless: :completed?
 
-    # インスタンスメソッド
+  # インスタンスメソッド
   def overdue?
     sub_due_date < Date.current && !completed?
   end
@@ -58,7 +58,7 @@ class SubTask < ApplicationRecord
     return unless task && user
 
     if task.user_id != user_id
-      errors.add(:task, 'は同じユーザーのタスクである必要があります')
+      errors.add(:task, "は同じユーザーのタスクである必要があります")
     end
   end
 
@@ -67,7 +67,7 @@ class SubTask < ApplicationRecord
     return unless sub_due_date
 
     if sub_due_date < Date.current
-      errors.add(:sub_due_date, 'は今日以降の日付を設定してください')
+      errors.add(:sub_due_date, "は今日以降の日付を設定してください")
     end
   end
 

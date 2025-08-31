@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   # タスク関連（ネストしたサブタスクを含む）
   resources :tasks do
     # ネストしたサブタスク（タスクに紐づく操作）
-    resources :sub_tasks, except: [:show] do
+    resources :sub_tasks, except: [ :show ] do
       member do
         patch :complete      # 完了にする
         patch :restart       # 未完了にする

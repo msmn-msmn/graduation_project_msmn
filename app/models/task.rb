@@ -32,8 +32,8 @@ class Task < ApplicationRecord
   }
 
 
-  scope :active, -> { where.not(status: [:completed, :cancelled]) }
-  scope :overdue, -> { where('due_date < ? AND status != ?', Time.current, statuses[:completed]) }
+  scope :active, -> { where.not(status: [ :completed, :cancelled ]) }
+  scope :overdue, -> { where("due_date < ? AND status != ?", Time.current, statuses[:completed]) }
   scope :due_soon, -> { where(due_date: Time.current..3.days.from_now) }
 
   # コールバック
@@ -60,9 +60,9 @@ class Task < ApplicationRecord
   # 締切日の論理チェック
   def due_date_future
     return unless due_date
-    
+
     if due_date < Time.current
-      errors.add(:due_date, 'は現在時刻より未来である必要があります')
+      errors.add(:due_date, "は現在時刻より未来である必要があります")
     end
   end
 
