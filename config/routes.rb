@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  get "sub_tasks/edit"
+  get "sub_tasks/update"
+  get "sub_tasks/destroy"
+  get "sub_tasks/complete"
+  get "sub_tasks/restart"
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
   devise_for :users,
   path: "",
@@ -9,7 +14,16 @@ Rails.application.routes.draw do
   }
 
   resources :users, only: %i[index show edit update destroy] # new,createはDeviseから提供される
-  resources :tasks  # 全アクション使用のため省略形
+  # タスク関連（ネストしたサブタスクを含む）
+  resources :tasks do
+    # ネストしたサブタスク（タスクに紐づく操作）
+    resources :sub_tasks, except: [ :show ] do
+      member do
+        patch :complete      # 完了にする
+        patch :restart       # 未完了にする
+      end
+    end
+  end
 
   root to: "static_pages#index"
 
