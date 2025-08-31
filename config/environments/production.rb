@@ -88,18 +88,18 @@ Rails.application.configure do
 
   # Gmail SMTP設定
   config.action_mailer.smtp_settings = {
-    address: "smtp.gmail.com",
-    port: 587,
-    domain: Settings.default_url_options.host,
-    user_name: ENV["GMAIL_USERNAME"],
-    password: ENV["GMAIL_PASSWORD"],  # アプリパスワード
-    authentication: "plain",
-    enable_starttls_auto: true,
+    address: "smtp.gmail.com",                  # SMTPサーバーのアドレス（固定）
+    port: 587,                                  # SMTPサーバーのポート（固定）
+    domain: "gmail.com",                        # ドメイン名
+    user_name: ENV["GMAIL_ADRESS"],              # 認証用メールアドレス（変数）
+    password: ENV["GMAIL_PASSWORD"],             # アプリパスワード（変数）
+    authentication: "plain",                    # 認証方式（固定）
+    enable_starttls_auto: true,                 # TLS暗号化（固定
     open_timeout: 10,
     read_timeout: 10
   }
 
-  # デォルトURLフ設定
+  # デォルトURL設定
   config.action_mailer.default_url_options = {
     host: Settings.default_url_options.host,
     protocol: Settings.default_url_options.protocol
