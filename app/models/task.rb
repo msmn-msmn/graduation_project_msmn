@@ -2,13 +2,16 @@ class Task < ApplicationRecord
   belongs_to :user
   has_many :sub_tasks, dependent: :destroy
 
+  # 基本項目のバリデーション（常に適用）
   validates :name, presence: true, length: { minimum: 3, maximum: 50 }
-  validates :daily_task_time, presence: true, numericality: { greater_than: 0, only_integer: true }
-  validates :estimate_min_days, presence: true, numericality: { greater_than: 0 }
-  validates :estimate_normal_days, presence: true, numericality: { greater_than: 0 }
-  validates :estimate_max_days, presence: true, numericality: { greater_than: 0 }
   validates :description_for_ai, length: { maximum: 100 }, allow_blank: true
   validates :user_memo, length: { maximum: 200 }, allow_blank: true
+
+  # 見積もり項目のバリデーション（breakdown後のみ適用）
+  validates :daily_task_time, presence: true, numericality: { greater_than: 0, only_integer: true }, if: :estimates_required?
+  validates :estimate_min_days, presence: true, numericality: { greater_than: 0 }, if: :estimates_required?
+  validates :estimate_normal_days, presence: true, numericality: { greater_than: 0 }, if: :estimates_required?
+  validates :estimate_max_days, presence: true, numericality: { greater_than: 0 }, if: :estimates_required?
 
   # カスタムバリデーション
   validate :estimate_days_logical_order
@@ -31,6 +34,8 @@ class Task < ApplicationRecord
   urgent: 3    # 緊急
   }
 
+  # 見積もり項目のバリデーションが必要かどうかを判定
+  attr_accessor :skip_estimates_validation
 
   scope :active, -> { where.not(status: [ :completed, :cancelled ]) }
   scope :overdue, -> { where("due_date < ? AND status != ?", Time.current, statuses[:completed]) }
@@ -44,6 +49,11 @@ class Task < ApplicationRecord
 
   private
 
+  def estimates_required?
+    # skip_estimates_validation が true の場合はバリデーションをスキップ
+    !skip_estimates_validation
+  end
+  
   # 見積もり日数の論理チェック
   def estimate_days_logical_order
     return unless estimate_min_days && estimate_normal_days && estimate_max_days

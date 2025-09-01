@@ -1,132 +1,51 @@
-<div class="task-card mb-3" data-task-id="<%= task.id %>">
-  <div class="card shadow-sm h-100">
-    <!-- 優先度インジケーター -->
-    <div class="priority-indicator priority-<%= task.priority || 'medium' %>"></div>
-    
-    <div class="card-body p-3">
-      <!-- タスクタイトル -->
-      <h6 class="card-title mb-2">
-        <%= link_to task.title, task_path(task), 
-            class: 'text-decoration-none text-dark fw-bold',
-            data: { 
-              bs_toggle: 'modal', 
-              bs_target: '#taskModal',
-              task_id: task.id 
-            } %>
-      </h6>
-      
-      <!-- タスクの説明（短縮表示） -->
-      <% if task.description.present? %>
-        <p class="card-text text-muted small mb-2">
-          <%= truncate(task.description, length: 60) %>
-        </p>
-      <% end %>
-      
-      <!-- 期限日 -->
-      <% if task.due_date.present? %>
-        <div class="mb-2">
-          <small class="text-muted">
-            <i class="fas fa-calendar-alt me-1"></i>
-            <span class="due-date <%= 'text-danger' if task.due_date < Date.current && task.status != 'done' %>">
-              <%= task.due_date.strftime('%m/%d') %>
-            </span>
-          </small>
-        </div>
-      <% end %>
-      
-      <!-- タグ表示 -->
-      <% if task.tags.any? %>
-        <div class="mb-2">
-          <% task.tags.each do |tag| %>
-            <span class="badge bg-secondary me-1 small"><%= tag.name %></span>
-          <% end %>
-        </div>
-      <% end %>
-      
-      <!-- 担当者アバター（複数人対応の場合） -->
-      <% if task.assigned_user.present? %>
-        <div class="d-flex align-items-center mb-2">
-          <div class="avatar-sm me-2">
-            <% if task.assigned_user.avatar.present? %>
-              <%= image_tag task.assigned_user.avatar, class: 'rounded-circle', size: '24x24' %>
-            <% else %>
-              <div class="avatar-placeholder">
-                <%= task.assigned_user.name.first.upcase %>
-              </div>
-            <% end %>
-          </div>
-          <small class="text-muted"><%= task.assigned_user.name %></small>
-        </div>
-      <% end %>
+<div class="col-md-6 mb-3">
+  <div class="card">
+    <!-- カードヘッダー：タスク名と状態 -->
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0"><%= task.name %></h5>
+      <span class="badge bg-secondary">
+        <%= task.status&.humanize || "未設定" %>
+      </span>
     </div>
     
-    <!-- カードフッター（アクションボタン） -->
-    <div class="card-footer bg-transparent border-0 p-2">
-      <div class="d-flex justify-content-between align-items-center">
-        <!-- ステータス変更ボタン -->
-        <div class="btn-group" role="group">
-          <% unless task.status == 'todo' %>
-            <%= link_to update_status_task_path(task, status: 'todo'), 
-                method: :patch, 
-                class: 'btn btn-outline-info btn-sm',
-                title: 'TODOに戻す',
-                data: { confirm: 'TODOに戻しますか？' } do %>
-              <i class="fas fa-arrow-left"></i>
-            <% end %>
-          <% end %>
-          
-          <% if task.status == 'todo' %>
-            <%= link_to update_status_task_path(task, status: 'in_progress'), 
-                method: :patch, 
-                class: 'btn btn-outline-warning btn-sm',
-                title: '進行中にする' do %>
-              <i class="fas fa-play"></i>
-            <% end %>
-          <% elsif task.status == 'in_progress' %>
-            <%= link_to update_status_task_path(task, status: 'review'), 
-                method: :patch, 
-                class: 'btn btn-outline-primary btn-sm',
-                title: 'レビューに送る' do %>
-              <i class="fas fa-eye"></i>
-            <% end %>
-          <% elsif task.status == 'review' %>
-            <%= link_to update_status_task_path(task, status: 'done'), 
-                method: :patch, 
-                class: 'btn btn-outline-success btn-sm',
-                title: '完了にする' do %>
-              <i class="fas fa-check"></i>
-            <% end %>
-          <% end %>
-        </div>
-        
-        <!-- その他のアクション -->
-        <div class="dropdown">
-          <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-            <i class="fas fa-ellipsis-h"></i>
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li>
-              <%= link_to edit_task_path(task), class: 'dropdown-item' do %>
-                <i class="fas fa-edit me-2"></i>編集
-              <% end %>
-            </li>
-            <li>
-              <%= link_to task_path(task), class: 'dropdown-item' do %>
-                <i class="fas fa-eye me-2"></i>詳細
-              <% end %>
-            </li>
-            <li><hr class="dropdown-divider"></li>
-            <li>
-              <%= link_to task_path(task), 
-                  method: :delete, 
-                  class: 'dropdown-item text-danger',
-                  data: { confirm: '本当に削除しますか？' } do %>
-                <i class="fas fa-trash me-2"></i>削除
-              <% end %>
-            </li>
-          </ul>
-        </div>
-      </div>
+    <!-- カード本体：基本情報 -->
+    <div class="card-body">
+      <!-- 期限 -->
+      <p class="mb-2">
+        <strong>期限:</strong> 
+        <%= task.due_date&.strftime("%Y年%m月%d日") || "未設定" %>
+      </p>
+      
+      <!-- 見積日数 -->
+      <p class="mb-2">
+        <strong>見積:</strong> 
+        <%= task.estimate_min_days %>〜<%= task.estimate_max_days %>日
+      </p>
+      
+      <!-- 1日の作業時間 -->
+      <p class="mb-2">
+        <strong>作業時間:</strong> 
+        <%= task.daily_task_time %>分/日
+      </p>
+      
+      <!-- 小タスク数 -->
+      <p class="mb-2">
+        <strong>小タスク:</strong> 
+        <%= task.sub_tasks.count %>個
+      </p>
+      
+      <!-- 作成日時 -->
+      <p class="mb-0 text-muted small">
+        作成: <%= task.created_at.strftime("%m月%d日 %H:%M") %>
+      </p>
+    </div>
+    
+    <!-- カードフッター：アクションボタン -->
+    <div class="card-footer">
+      <%= link_to "詳細を見る", task_path(task), 
+          class: "btn btn-primary btn-sm" %>
+      <%= link_to "編集", edit_task_path(task), 
+          class: "btn btn-outline-secondary btn-sm" %>
     </div>
   </div>
 </div>

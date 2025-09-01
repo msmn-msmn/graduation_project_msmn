@@ -1,0 +1,49 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="mb-0">新しいタスクを作成</h3>
+        </div>
+        
+        <div class="card-body">
+          <%= form_with model: @task, url: breakdown_tasks_path, local: true do |form| %>
+            <!-- エラーメッセージ表示 -->
+            <% if @task.errors.any? %>
+              <div class="alert alert-danger">
+                <ul class="mb-0">
+                  <% @task.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <!-- タスク名 -->
+            <div class="mb-3">
+              <%= form.label :name, "タスク名", class: "form-label" %>
+              <%= form.text_field :name, class: "form-control", 
+                  placeholder: "例：Webアプリのユーザー認証機能を実装する", required: true %>
+            </div>
+
+            <!-- AI考慮事項（任意） -->
+            <div class="mb-4">
+              <%= form.label :description_for_ai, "AI分解時の考慮事項（任意）", class: "form-label" %>
+              <%= form.text_area :description_for_ai, class: "form-control", rows: 3,
+                  placeholder: "例：Ruby on Railsを使用、Deviseは使わずに自作、テストも含める" %>
+              <div class="form-text">
+                AIがタスクを分解する際に考慮してほしいことがあれば入力してください
+              </div>
+            </div>
+
+            <!-- ボタン -->
+            <div class="d-flex justify-content-between">
+              <%= link_to "キャンセル", tasks_path, class: "btn btn-secondary" %>
+              <%= form.submit "タスクを分解", class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

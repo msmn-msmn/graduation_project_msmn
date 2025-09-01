@@ -1,0 +1,99 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="mb-0">タスクの編集</h3>
+        </div>
+        
+        <div class="card-body">
+          <%= form_with model: @task, local: true do |form| %>
+            <!-- エラーメッセージ表示 -->
+            <% if @task.errors.any? %>
+              <div class="alert alert-danger">
+                <h5><%= pluralize(@task.errors.count, "error") %> prohibited this task from being saved:</h5>
+                <ul class="mb-0">
+                  <% @task.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <!-- タスク名 -->
+            <div class="mb-3">
+              <%= form.label :name, "タスク名", class: "form-label" %>
+              <%= form.text_field :name, class: "form-control", placeholder: "タスク名を入力してください" %>
+            </div>
+
+            <!-- 期限 -->
+            <div class="mb-3">
+              <%= form.label :due_date, "期限", class: "form-label" %>
+              <%= form.date_field :due_date, class: "form-control" %>
+            </div>
+
+            <!-- 1日の作業時間 -->
+            <div class="mb-3">
+              <%= form.label :daily_task_time, "1日の作業時間（分）", class: "form-label" %>
+              <%= form.number_field :daily_task_time, class: "form-control", min: 1, step: 1 %>
+            </div>
+
+            <!-- 見積日数（3つセット） -->
+            <div class="mb-3">
+              <label class="form-label">見積日数</label>
+              <div class="row">
+                <div class="col-md-4">
+                  <%= form.label :estimate_min_days, "最短", class: "form-label small" %>
+                  <%= form.number_field :estimate_min_days, class: "form-control", min: 1, step: 0.5 %>
+                </div>
+                <div class="col-md-4">
+                  <%= form.label :estimate_normal_days, "通常", class: "form-label small" %>
+                  <%= form.number_field :estimate_normal_days, class: "form-control", min: 1, step: 0.5 %>
+                </div>
+                <div class="col-md-4">
+                  <%= form.label :estimate_max_days, "最長", class: "form-label small" %>
+                  <%= form.number_field :estimate_max_days, class: "form-control", min: 1, step: 0.5 %>
+                </div>
+              </div>
+            </div>
+
+            <!-- 作業状態 -->
+            <div class="mb-3">
+              <%= form.label :status, "作業状態", class: "form-label" %>
+              <%= form.select :status, 
+                  options_for_select([
+                    ['未着手', 'not_started'],
+                    ['作業中', 'in_progress'],
+                    ['完了', 'completed'],
+                    ['保留', 'on_hold'],
+                    ['キャンセル', 'cancelled']
+                  ], @task.status), 
+                  {}, 
+                  { class: "form-select" } %>
+            </div>
+
+            <!-- 優先度 -->
+            <div class="mb-4">
+              <%= form.label :priority, "優先度", class: "form-label" %>
+              <%= form.select :priority, 
+                  options_for_select([
+                    ['低', 'low'],
+                    ['中', 'medium'],
+                    ['高', 'high'],
+                    ['緊急', 'urgent']
+                  ], @task.priority), 
+                  {}, 
+                  { class: "form-select" } %>
+            </div>
+
+            <!-- ボタン -->
+            <div class="d-flex justify-content-between">
+              <%= link_to "キャンセル", task_path(@task), class: "btn btn-secondary" %>
+              <%= form.submit "更新", class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
