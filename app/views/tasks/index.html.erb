@@ -81,16 +81,16 @@
           <h5 class="mb-0">
             <i class="fas fa-clipboard-list me-2"></i>未着手
             <span class="badge bg-light text-dark ms-2">
-              <%= @tasks.where(status: 'todo').count %>
+              <%= @tasks.where(status: 'not_started').count %>
             </span>
           </h5>
         </div>
-        <div class="kanban-body" id="todo-column">
-          <% @tasks.where(status: 'todo').order(:priority, :created_at).each do |task| %>
+        <div class="kanban-body" id="not_started-column">
+          <% @tasks.where(status: 'not_started').order(:priority, :created_at).each do |task| %>
             <%= render 'task_card', task: task %>
           <% end %>
           
-          <% if @tasks.where(status: 'todo').empty? %>
+          <% if @tasks.where(status: 'not_started').empty? %>
             <div class="empty-state">
               <i class="fas fa-inbox text-muted mb-2"></i>
               <p class="text-muted mb-0">タスクがありません</p>
