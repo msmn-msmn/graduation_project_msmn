@@ -53,7 +53,7 @@ class Task < ApplicationRecord
     # skip_estimates_validation が true の場合はバリデーションをスキップ
     !skip_estimates_validation
   end
-  
+
   # 見積もり日数の論理チェック
   def estimate_days_logical_order
     return unless estimate_min_days && estimate_normal_days && estimate_max_days

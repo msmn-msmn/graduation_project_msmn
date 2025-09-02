@@ -21,8 +21,6 @@ Rails.application.routes.draw do
       post :breakdown  # new → breakdown
       post :create_from_breakdown
     end
-    
-   
   end
 
   root to: "static_pages#index"
