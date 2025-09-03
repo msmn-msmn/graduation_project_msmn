@@ -68,22 +68,63 @@ class TasksController < ApplicationController
 
   # ダミーデータ設定メソッド
   def dummy_data
-    {
-  "task": {
-    "name": "サンプルタスク",
-    "description_for_ai": "AI分解用のサンプルタスク説明",
-    "due_date": "2025-12-29",
-    "daily_task_time": 120,
-    "estimate_min_days": 3,
-    "estimate_normal_days": 5,
-    "estimate_max_days": 8,
-    "priority": "medium",
-    "status": "not_started",
-    "created_at": "2024-12-01T10:00:00Z",
-    "updated_at": "2024-12-01T10:00:00Z"
+  {
+    "task": {
+      "name": "サンプルタスク",
+      "description_for_ai": "AI分解用のサンプルタスク説明",
+      "due_date": "2025-12-29",
+      "daily_task_time": 120,
+      "estimate_min_days": 3,
+      "estimate_normal_days": 5,
+      "estimate_max_days": 8,
+      "priority": "medium",
+      "status": "not_started",
+      # SubTasks を追加
+      "sub_tasks_attributes": [
+        {
+          "name": "要件定義・設計",
+          "status": "not_started",
+          "priority": "medium",
+          "steps_attributes": [
+            { "name": "ユーザー認証の要件整理", "status": "not_started", "position": 1 },
+            { "name": "データベース設計", "status": "not_started", "position": 2 },
+            { "name": "UI設計", "status": "not_started", "position": 3 }
+          ]
+        },
+        {
+          "name": "バックエンド実装",
+          "status": "not_started",
+          "priority": "high",
+          "steps_attributes": [
+            { "name": "ユーザーモデルの作成", "status": "not_started", "position": 1 },
+            { "name": "認証コントローラーの実装", "status": "not_started", "position": 2 },
+            { "name": "セッション管理の実装", "status": "not_started", "position": 3 }
+          ]
+        },
+        {
+          "name": "フロントエンド実装",
+          "status": "not_started",
+          "priority": "medium",
+          "steps_attributes": [
+            { "name": "ログイン画面の作成", "status": "not_started", "position": 1 },
+            { "name": "新規登録画面の作成", "status": "not_started", "position": 2 },
+            { "name": "ユーザー情報画面の作成", "status": "not_started", "position": 3 }
+          ]
+        },
+        {
+          "name": "テスト・デバッグ",
+          "status": "not_started",
+          "priority": "low",
+          "steps_attributes": [
+            { "name": "単体テストの作成", "status": "not_started", "position": 1 },
+            { "name": "統合テストの実施", "status": "not_started", "position": 2 },
+            { "name": "バグ修正・調整", "status": "not_started", "position": 3 }
+          ]
+        }
+      ]
+    }
   }
-}
-  end
+end
 
   def task_params
   params.require(:task).permit(:id, :name, :description_for_ai, :status, :priority,
