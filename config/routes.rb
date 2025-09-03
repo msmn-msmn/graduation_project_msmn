@@ -16,11 +16,11 @@ Rails.application.routes.draw do
   resources :users, only: %i[index show edit update destroy] # new,createはDeviseから提供される
   # タスク関連（ネストしたサブタスクを含む）
   resources :tasks do
-    # 新規作成の分解結果を表示する専用ルート
-    collection do
-      post :breakdown  # new → breakdown
-      post :create_from_breakdown
-    end
+    resources :sub_tasks
+  end
+
+  resources :sub_tasks do
+    resources :steps
   end
 
   root to: "static_pages#index"
