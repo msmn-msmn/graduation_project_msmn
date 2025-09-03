@@ -1,0 +1,118 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="mb-0">AI分解結果の確認・調整</h3>
+          <small class="text-muted">内容を確認し、必要に応じて修正してください</small>
+        </div>
+        
+        <div class="card-body">
+          <%= form_with model: @task, url: finalize_task_path(@task), method: :patch, local: true do |form| %>
+            
+            <!-- 基本タスク情報 -->
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <h5>基本情報</h5>
+                
+                <!-- タスク名 -->
+                <div class="mb-3">
+                  <%= form.label :name, "タスク名", class: "form-label" %>
+                  <%= form.text_field :name, class: "form-control" %>
+                </div>
+                
+                <!-- 期限 -->
+                <div class="mb-3">
+                  <%= form.label :due_date, "期限", class: "form-label" %>
+                  <%= form.date_field :due_date, value: (@task.due_date || 2.weeks.from_now.to_date), class: "form-control" %>
+                </div>
+                
+                <!-- 1日の作業時間 -->
+                <div class="mb-3">
+                  <%= form.label :daily_task_time, "1日の作業時間（分）", class: "form-label" %>
+                  <%= form.number_field :daily_task_time, value: (@task.daily_task_time || 120), class: "form-control", min: 30, step: 30 %>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <h5>見積日数</h5>
+                
+                <div class="row">
+                  <div class="col-4">
+                    <%= form.label :estimate_min_days, "最短", class: "form-label small" %>
+                    <%= form.number_field :estimate_min_days, value: (@task.estimate_min_days || 3), class: "form-control", min: 1, step: 0.5 %>
+                  </div>
+                  <div class="col-4">
+                    <%= form.label :estimate_normal_days, "通常", class: "form-label small" %>
+                    <%= form.number_field :estimate_normal_days, value: (@task.estimate_normal_days || 5), class: "form-control", min: 1, step: 0.5 %>
+                  </div>
+                  <div class="col-4">
+                    <%= form.label :estimate_max_days, "最長", class: "form-label small" %>
+                    <%= form.number_field :estimate_max_days, value: (@task.estimate_max_days || 8), class: "form-control", min: 1, step: 0.5 %>
+                  </div>
+                </div>
+                
+                <div class="row mt-3">
+                  <div class="col-6">
+                    <%= form.label :priority, "優先度", class: "form-label" %>
+                    <%= form.select :priority, options_for_select([['中', 'medium'],['低', 'low'],['高', 'high'],['緊急', 'urgent']], @task.priority), {}, { class: "form-select" } %>
+                  </div>
+                  <div class="col-6">
+                    <%= form.label :status, "状態", class: "form-label" %>
+                    <%= form.select :status, options_for_select([['未着手','not_started'],['作業中','in_progress'],['完了','completed']], @task.status), {}, { class: "form-select" } %>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 分解されたタスク一覧 -->
+            <h5 class="mt-4">小タスク一覧</h5>
+            <%= form.fields_for :sub_tasks do |sf| %>
+              <div class="border p-3 mb-3 rounded">
+                <div class="mb-2">
+                  <%= sf.text_field :name, placeholder: "小タスク名", class: "form-control mb-2" %>
+                  <%= sf.select :status, [["未着手","not_started"],["作業中","in_progress"],["完了","completed"]], {}, { class: "form-select mb-2" } %>
+                  <div class="form-check">
+                    <%= sf.check_box :_destroy, class: "form-check-input" %>
+                    <%= sf.label :_destroy, "削除", class: "form-check-label" %>
+                  </div>
+                </div>
+
+                <!-- ステップ -->
+                <%= sf.fields_for :steps do |stf| %>
+                  <div class="ms-3 mb-2">
+                    <%= stf.text_field :name, placeholder: "ステップ名", class: "form-control mb-1" %>
+                    <%= stf.date_field :due_date, class: "form-control mb-1" %>
+                    <div class="form-check">
+                      <%= stf.check_box :_destroy, class: "form-check-input" %>
+                      <%= stf.label :_destroy, "削除", class: "form-check-label" %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+
+            <!-- ヒント -->
+            <div class="alert alert-info mt-3">
+              <small>
+                <strong>💡 ヒント:</strong> 
+                この分解結果は参考です。実際のプロジェクトに合わせて調整してください。
+                将来的には、より詳細な編集機能を追加予定です。
+              </small>
+            </div>
+
+            <!-- 隠しフィールド -->
+            <%= form.hidden_field :description_for_ai, value: @task.description_for_ai %>
+
+            <!-- ボタン -->
+            <div class="d-flex justify-content-between mt-3">
+              <%= link_to "戻る", new_task_path, class: "btn btn-secondary" %>
+              <%= form.submit "タスクを登録", class: "btn btn-success btn-lg" %>
+            </div>
+          
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

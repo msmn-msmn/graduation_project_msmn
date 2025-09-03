@@ -5,7 +5,6 @@ class SubTask < ApplicationRecord
   accepts_nested_attributes_for :steps, allow_destroy: true
 
   validates :name, presence: true, length: { maximum: 255 }
-  validates :step_name, length: { maximum: 255 }
   validates :sub_work_time, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
   validates :sub_due_date, presence: true
 

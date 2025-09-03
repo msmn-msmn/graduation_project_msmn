@@ -18,6 +18,10 @@ class Task < ApplicationRecord
   validate :estimate_days_logical_order
   validate :due_date_future
 
+  with_options unless: -> { draft? || skip_estimates_validation } do
+    validates :daily_task_time, :estimate_min_days, :estimate_normal_days, :estimate_max_days, presence: true
+  end
+
   # タスク作業状態
   enum status: {
   not_started: 0,    # 未着手
@@ -45,7 +49,6 @@ class Task < ApplicationRecord
   # コールバック
   before_save :calculate_estimated_days
   after_update :update_completion_time, if: :saved_change_to_status?
-
 
 
   private
