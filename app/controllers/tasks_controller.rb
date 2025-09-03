@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_task, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_task, only: [ :show, :edit, :update, :destroy, :finalize]
 
 
   def new
@@ -11,15 +11,20 @@ class TasksController < ApplicationController
 
   def create
     @task = current_user.tasks.build(task_params)
+     @task.draft = true
+    @task.skip_estimates_validation = true
 
-    if @task.save
-      # AI分解処理（後で実装、今はダミーデータ）
-      create_dummy_subtasks(@task)
-      redirect_to task_path(@task)
-    else
-      render :new
+    Task.transaction do
+      @task.save!                               # まず Task をドラフト保存
+      dummy_data!(@task)              # 次に SubTask / Step をダミーで作成
     end
+
+    render :breakdown_result                    # 分解結果の編集画面へ
+  rescue ActiveRecord::RecordInvalid => e
+    flash.now[:alert] = e.record.errors.full_messages.to_sentence
+    render :new, status: :unprocessable_entity
   end
+
 
   def index
     @tasks = current_user.tasks
@@ -37,7 +42,7 @@ class TasksController < ApplicationController
   def destroy
   end
 
-  # AI分解処理（ダミーデータ使用）
+  # AI分解処理（分解ボタン → 仮保存（ドラフト）
   def breakdown
     @task = current_user.tasks.build(task_params)
     # breakdown画面でも一旦スキップ（基本項目のみチェック）
@@ -46,17 +51,14 @@ class TasksController < ApplicationController
     @task.assign_attributes(dummy_data[:task])
   end
 
-  # 分解結果から実際にタスクを作成
-  def create_from_breakdown
-    @task = current_user.tasks.build(task_params)
-    # 最終保存時は全項目のバリデーションを実行
+  # 分解結果の編集 → 本保存（ドラフト解除）
+  def finalize
     @task.skip_estimates_validation = false
-
-    if @task.save
-      redirect_to tasks_path, notice: "タスクが作成されました！"
+    if @task.update(task_params.merge(draft: false))
+      redirect_to tasks_path, notice: "タスクを登録しました！"
     else
-      Rails.logger.debug "🐻‍❄️Task validation errors: #{@task.errors.full_messages}"
-      render :breakdown, status: :unprocessable_entity
+      flash.now[:alert] = @task.errors.full_messages.to_sentence
+      render :breakdown_result, status: :unprocessable_entity
     end
   end
 

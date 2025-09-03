@@ -17,10 +17,13 @@ Rails.application.routes.draw do
   # タスク関連（ネストしたサブタスクを含む）
   resources :tasks do
     collection do
-      post :breakdown
-      post :create_from_breakdown
+      post :breakdown           # new からの“仮保存”
+    end
+    member do
+      patch :finalize           # 分解結果画面からの“本保存”
     end
   end
+
 
   root to: "static_pages#index"
 
