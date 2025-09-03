@@ -86,8 +86,12 @@ class TasksController < ApplicationController
   end
 
   def task_params
-  params.require(:task).permit(:name, :due_date, :daily_task_time,
-                              :estimate_min_days, :estimate_normal_days, :estimate_max_days,
-                              :status, :priority, :description_for_ai)
+  params.require(:task).permit(:id, :name, :description_for_ai, :status, :priority,
+                              :daily_task_time, :estimate_min_days, :estimate_normal_days,
+                              :estimate_max_days, :calculated_estimated_days, :due_date,
+                              sub_tasks_attributes: [
+                              :id, :name, :status, :priority, :_destroy,
+                              steps_attributes: [ :id, :name, :status,
+                              :due_date, :priority, :position, :_destroy ] ])
   end
 end
