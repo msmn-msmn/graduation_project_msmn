@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       post :breakdown           # new からの“仮保存”
     end
     member do
+      get :breakdown_result
       patch :finalize           # 分解結果画面からの“本保存”
     end
   end

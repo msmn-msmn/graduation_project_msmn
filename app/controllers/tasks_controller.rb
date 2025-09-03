@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_task, only: [ :show, :edit, :update, :destroy, :finalize]
+  before_action :set_task, only: [ :show, :edit, :update, :destroy, :finalize, :breakdown_result ]
 
 
   def new
@@ -47,8 +47,18 @@ class TasksController < ApplicationController
     @task = current_user.tasks.build(task_params)
     # breakdown画面でも一旦スキップ（基本項目のみチェック）
     @task.skip_estimates_validation = true
-
+    Rails.logger.debug params.inspect
+    # ダミーデータを割り当て
     @task.assign_attributes(dummy_data[:task])
+
+    if @task.save
+    # 保存に成功したら分解結果画面へ
+      redirect_to breakdown_result_task_path(@task)
+    else
+      # 保存に失敗したら new.html.erb を再表示
+      flash.now[:alert] = @task.errors.full_messages.to_sentence
+      render :new, status: :unprocessable_entity
+    end
   end
 
   # 分解結果の編集 → 本保存（ドラフト解除）
@@ -71,56 +81,65 @@ class TasksController < ApplicationController
   # ダミーデータ設定メソッド
   def dummy_data
   {
-    "task": {
-      "name": "サンプルタスク",
-      "description_for_ai": "AI分解用のサンプルタスク説明",
-      "due_date": "2025-12-29",
-      "daily_task_time": 120,
-      "estimate_min_days": 3,
-      "estimate_normal_days": 5,
-      "estimate_max_days": 8,
-      "priority": "medium",
-      "status": "not_started",
+    task: {
+      user_id: current_user.id,
+      name: "サンプルタスク",
+      description_for_ai: "AI分解用のサンプルタスク説明",
+      due_date: "2025-12-29",
+      daily_task_time: 120,
+      estimate_min_days: 3,
+      estimate_normal_days: 5,
+      estimate_max_days: 8,
+      priority: 1,
+      status: "not_started",
       # SubTasks を追加
-      "sub_tasks_attributes": [
+      sub_tasks_attributes: [
         {
-          "name": "要件定義・設計",
-          "status": "not_started",
-          "priority": "medium",
-          "steps_attributes": [
-            { "name": "ユーザー認証の要件整理", "status": "not_started", "position": 1 },
-            { "name": "データベース設計", "status": "not_started", "position": 2 },
-            { "name": "UI設計", "status": "not_started", "position": 3 }
+          user_id: current_user.id,
+          name: "要件定義・設計",
+          status: "not_started",
+          priority: 0,
+          sub_due_date: "2025-12-30", # 👈 追加
+          steps_attributes: [
+            { name: "ユーザー認証の要件整理", status: "not_started", position: 0, user_id: current_user.id },
+            { name: "データベース設計",       status: "not_started", position: 1, user_id: current_user.id },
+            { name: "UI設計",                 status: "not_started", position: 2, user_id: current_user.id }
           ]
         },
         {
-          "name": "バックエンド実装",
-          "status": "not_started",
-          "priority": "high",
-          "steps_attributes": [
-            { "name": "ユーザーモデルの作成", "status": "not_started", "position": 1 },
-            { "name": "認証コントローラーの実装", "status": "not_started", "position": 2 },
-            { "name": "セッション管理の実装", "status": "not_started", "position": 3 }
+          user_id: current_user.id,
+          name: "バックエンド実装",
+          status: "not_started",
+          priority: 1,
+          sub_due_date: "2025-12-31",
+          steps_attributes: [
+            { name: "ユーザーモデルの作成",     status: "not_started", position: 0, user_id: current_user.id },
+            { name: "認証コントローラーの実装", status: "not_started", position: 1, user_id: current_user.id },
+            { name: "セッション管理の実装",     status: "not_started", position: 2, user_id: current_user.id }
           ]
         },
         {
-          "name": "フロントエンド実装",
-          "status": "not_started",
-          "priority": "medium",
-          "steps_attributes": [
-            { "name": "ログイン画面の作成", "status": "not_started", "position": 1 },
-            { "name": "新規登録画面の作成", "status": "not_started", "position": 2 },
-            { "name": "ユーザー情報画面の作成", "status": "not_started", "position": 3 }
+          user_id: current_user.id,
+          name: "フロントエンド実装",
+          status: "not_started",
+          priority: 2,
+          sub_due_date: "2026-01-02",
+          steps_attributes: [
+            { name: "ログイン画面の作成",   status: "not_started", position: 0, user_id: current_user.id },
+            { name: "新規登録画面の作成",   status: "not_started", position: 1, user_id: current_user.id },
+            { name: "ユーザー情報画面の作成", status: "not_started", position: 2, user_id: current_user.id }
           ]
         },
         {
-          "name": "テスト・デバッグ",
-          "status": "not_started",
-          "priority": "low",
-          "steps_attributes": [
-            { "name": "単体テストの作成", "status": "not_started", "position": 1 },
-            { "name": "統合テストの実施", "status": "not_started", "position": 2 },
-            { "name": "バグ修正・調整", "status": "not_started", "position": 3 }
+          user_id: current_user.id,
+          name: "テスト・デバッグ",
+          status: "not_started",
+          priority: 3,
+          sub_due_date: "2026-01-05",
+          steps_attributes: [
+            { name: "単体テストの作成",   status: "not_started", position: 0, user_id: current_user.id },
+            { name: "統合テストの実施",   status: "not_started", position: 1, user_id: current_user.id },
+            { name: "バグ修正・調整",     status: "not_started", position: 2, user_id: current_user.id }
           ]
         }
       ]
