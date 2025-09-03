@@ -11,7 +11,7 @@ class CreateSteps < ActiveRecord::Migration[7.2]
       t.timestamps
     end
 
-    add_index :steps, [:sub_task_id, :position], unique: true
+    add_index :steps, [ :sub_task_id, :position ], unique: true
     add_index :steps, :status
   end
 end
