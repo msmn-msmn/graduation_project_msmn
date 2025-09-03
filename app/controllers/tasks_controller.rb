@@ -52,7 +52,7 @@ class TasksController < ApplicationController
     @task.assign_attributes(dummy_data[:task])
 
     if @task.save
-    # 保存に成功したら分解結果画面へ
+      # 保存に成功したら分解結果画面へ
       redirect_to breakdown_result_task_path(@task)
     else
       # 保存に失敗したら new.html.erb を再表示
