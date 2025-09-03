@@ -1,6 +1,7 @@
 class Task < ApplicationRecord
   belongs_to :user
   has_many :sub_tasks, dependent: :destroy
+  accepts_nested_attributes_for :sub_tasks
 
   # 基本項目のバリデーション（常に適用）
   validates :name, presence: true, length: { minimum: 3, maximum: 50 }

@@ -8,6 +8,7 @@ class User < ApplicationRecord
 
   has_many :tasks, dependent: :destroy
   has_many :sub_tasks, dependent: :destroy
+  has_many :steps, dependent: :destroy
 
   validates :username, presence: true, uniqueness: true, length: { minimum: 3, maximum: 20 }
   validates :daily_available_time, presence: true, numericality: { greater_than_or_equal_to: 0, only_integer: true } # 正の整数であること

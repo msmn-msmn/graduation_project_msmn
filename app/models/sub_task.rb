@@ -1,6 +1,7 @@
 class SubTask < ApplicationRecord
   belongs_to :user
   belongs_to :task
+  has_many :steps, dependent: :destroy
 
   validates :name, presence: true, length: { maximum: 255 }
   validates :step_name, length: { maximum: 255 }
