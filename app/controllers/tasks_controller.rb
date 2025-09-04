@@ -45,10 +45,10 @@ class TasksController < ApplicationController
     end
 
     redirect_to user_root_path,                                  # 正常に削除できたら一覧へ
-                notice: 'タスクを削除しました。'               # 画面上部に通知メッセージを表示
+                notice: "タスクを削除しました。"               # 画面上部に通知メッセージを表示
   rescue ActiveRecord::RecordNotDestroyed => e               # destroy! が失敗した場合（コールバックで :abort 等）
     flash.now[:alert] =                                      # エラーメッセージをその場表示用にセット
-      @task.errors.full_messages.to_sentence.presence ||'タスクの削除に失敗しました。'
+      @task.errors.full_messages.to_sentence.presence ||"タスクの削除に失敗しました。"
     render :edit, status: :unprocessable_entity
   end
 
