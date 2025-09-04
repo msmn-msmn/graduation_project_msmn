@@ -41,11 +41,17 @@
     </div>
     
     <!-- カードフッター：アクションボタン -->
-    <div class="card-footer">
-      <%= link_to "詳細を見る", task_path(task), 
-          class: "btn btn-primary btn-sm" %>
-      <%= link_to "編集", edit_task_path(task), 
-          class: "btn btn-outline-secondary btn-sm" %>
+    <div class="card-footer d-flex gap-2 flex-wrap align-items-center">
+      <%= link_to "詳細確認", task_path(task),
+            class: "btn btn-primary btn-sm" %>
+
+      <%= link_to "編集", edit_task_path(task),
+            class: "btn btn-outline-secondary btn-sm" %>
+
+      <%= button_to "削除", task_path(task), method: :delete,
+            data: { turbo_confirm: "本当に削除しますか？" },
+            class: "btn btn-danger btn-sm",
+            form: { class: "d-inline-block m-0 p-0" } %>
     </div>
   </div>
 </div>

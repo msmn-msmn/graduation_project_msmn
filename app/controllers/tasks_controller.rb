@@ -40,6 +40,16 @@ class TasksController < ApplicationController
   end
 
   def destroy
+    ActiveRecord::Base.transaction do                        # 失敗時にDB変更を元に戻すためのトランザクション開始
+      @task.destroy!
+    end
+
+    redirect_to user_root_path,                                  # 正常に削除できたら一覧へ
+                notice: "タスクを削除しました。"               # 画面上部に通知メッセージを表示
+  rescue ActiveRecord::RecordNotDestroyed => e               # destroy! が失敗した場合（コールバックで :abort 等）
+    flash.now[:alert] =                                      # エラーメッセージをその場表示用にセット
+      @task.errors.full_messages.to_sentence.presence ||"タスクの削除に失敗しました。"
+    render :edit, status: :unprocessable_entity
   end
 
   # AI分解処理（分解ボタン → 仮保存（ドラフト）
