@@ -37,6 +37,12 @@ class TasksController < ApplicationController
   end
 
   def update
+    if @task.update(task_params)
+      redirect_to @task, notice: "タスクを更新しました。"
+    else
+      flash.now[:alert] = @task.errors.full_messages.to_sentence
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   def destroy
