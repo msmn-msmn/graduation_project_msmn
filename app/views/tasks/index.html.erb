@@ -42,7 +42,7 @@
       <div class="card bg-info text-white">
         <div class="card-body text-center">
           <h5 class="card-title">未着手</h5>
-          <h2 class="mb-0"><%= @tasks.where(status: 'todo').count %></h2>
+          <h2 class="mb-0"><%= @tasks.where(status: 'not_started').count %></h2>
         </div>
       </div>
     </div>
@@ -66,7 +66,7 @@
       <div class="card bg-success text-white">
         <div class="card-body text-center">
           <h5 class="card-title">完了</h5>
-          <h2 class="mb-0"><%= @tasks.where(status: 'done').count %></h2>
+          <h2 class="mb-0"><%= @tasks.where(status: 'completed').count %></h2>
         </div>
       </div>
     </div>
@@ -159,16 +159,16 @@
           <h5 class="mb-0">
             <i class="fas fa-check-circle me-2"></i>完了
             <span class="badge bg-light text-dark ms-2">
-              <%= @tasks.where(status: 'done').count %>
+              <%= @tasks.where(status: 'completed').count %>
             </span>
           </h5>
         </div>
         <div class="kanban-body" id="done-column">
-          <% @tasks.where(status: 'done').order(:completed_at).each do |task| %>
+          <% @tasks.where(status: 'completed').order(:completed_at).each do |task| %>
             <%= render 'task_card', task: task %>
           <% end %>
           
-          <% if @tasks.where(status: 'done').empty? %>
+          <% if @tasks.where(status: 'completed').empty? %>
             <div class="empty-state">
               <i class="fas fa-inbox text-muted mb-2"></i>
               <p class="text-muted mb-0">タスクがありません</p>
