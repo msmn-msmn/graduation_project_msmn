@@ -1,0 +1,146 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card">
+
+        <!-- ヘッダー：タイトル + 右側に編集/削除ボタン -->
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h3 class="mb-0">タスクの詳細</h3>
+          <div class="d-flex gap-2">
+            <%= link_to "編集", edit_task_path(@task),
+                  class: "btn btn-outline-secondary btn-sm" %>
+
+            <%= button_to "削除", task_path(@task),
+                  method: :delete,
+                  data: { turbo_confirm: "本当に削除しますか？" },
+                  class: "btn btn-danger btn-sm",
+                  form: { class: "d-inline-block m-0 p-0" } %>
+          </div>
+        </div>
+
+        <!-- 本文 -->
+        <div class="card-body">
+
+          <!-- 基本情報（編集フォームの項目に対応） -->
+          <h5 class="mb-3">基本情報</h5>
+          <dl class="row mb-4">
+            <dt class="col-sm-3">タスク名</dt>
+            <dd class="col-sm-9"><%= @task.name %></dd>
+
+            <dt class="col-sm-3">期限</dt>
+            <dd class="col-sm-9">
+              <%= @task.due_date&.strftime("%Y年%m月%d日") || "未設定" %>
+            </dd>
+
+            <dt class="col-sm-3">1日の作業時間</dt>
+            <dd class="col-sm-9">
+              <%= @task.daily_task_time.present? ? "#{@task.daily_task_time}分/日" : "未設定" %>
+            </dd>
+
+            <dt class="col-sm-3">作業状態</dt>
+            <dd class="col-sm-9">
+              <span class="badge bg-secondary">
+                <%= @task.status&.humanize || "未設定" %>
+              </span>
+            </dd>
+
+            <dt class="col-sm-3">優先度</dt>
+            <dd class="col-sm-9">
+              <span class="badge bg-light text-dark border">
+                <%= @task.priority&.humanize || "未設定" %>
+              </span>
+            </dd>
+          </dl>
+
+          <!-- 見積日数 -->
+          <h5 class="mb-3">見積日数</h5>
+          <div class="row mb-4">
+            <div class="col-md-4">
+              <div class="border rounded p-3 h-100">
+                <div class="small text-muted mb-1">最短</div>
+                <div class="fw-bold">
+                  <%= @task.estimate_min_days.present? ? "#{@task.estimate_min_days}日" : "未設定" %>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mt-3 mt-md-0">
+              <div class="border rounded p-3 h-100">
+                <div class="small text-muted mb-1">通常</div>
+                <div class="fw-bold">
+                  <%= @task.estimate_normal_days.present? ? "#{@task.estimate_normal_days}日" : "未設定" %>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mt-3 mt-md-0">
+              <div class="border rounded p-3 h-100">
+                <div class="small text-muted mb-1">最長</div>
+                <div class="fw-bold">
+                  <%= @task.estimate_max_days.present? ? "#{@task.estimate_max_days}日" : "未設定" %>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- メタ情報 -->
+          <div class="text-muted small mb-4">
+            作成: <%= @task.created_at.strftime("%Y年%m月%d日 %H:%M") %>　
+            更新: <%= @task.updated_at.strftime("%Y年%m月%d日 %H:%M") %>　
+            小タスク数: <%= @task.sub_tasks.size %>個
+          </div>
+
+          <!-- 小タスク一覧（編集フォーム構成に対応） -->
+          <h5 class="mb-3">小タスク</h5>
+          <% if @task.sub_tasks.any? %>
+            <% @task.sub_tasks.each do |st| %>
+              <div class="border rounded p-3 mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <div class="fw-bold"><%= st.name.presence || "（名称未設定）" %></div>
+                  <span class="badge bg-secondary"><%= st.status&.humanize || "未設定" %></span>
+                </div>
+
+                <!-- ステップ -->
+                <% if st.steps.any? %>
+                  <ul class="list-group list-group-flush">
+                    <% st.steps.each do |step| %>
+                      <li class="list-group-item px-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <div>
+                            <span class="fw-semibold"><%= step.name.presence || "（ステップ名未設定）" %></span>
+                          </div>
+                          <div class="text-muted small">
+                            期限:
+                            <%= step.due_date&.strftime("%Y年%m月%d日") || "未設定" %>
+                          </div>
+                        </div>
+                      </li>
+                    <% end %>
+                  </ul>
+                <% else %>
+                  <div class="text-muted small">ステップは未登録です</div>
+                <% end %>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="text-muted">小タスクはまだありません。</div>
+          <% end %>
+
+        </div>
+
+        <!-- フッター：戻るなど -->
+        <div class="card-footer d-flex justify-content-between align-items-center">
+          <%= link_to "一覧へ戻る", tasks_path, class: "btn btn-secondary btn-sm" %>
+          <div class="d-flex gap-2">
+            <%= link_to "編集", edit_task_path(@task),
+                  class: "btn btn-outline-secondary btn-sm" %>
+            <%= button_to "削除", task_path(@task),
+                  method: :delete,
+                  data: { turbo_confirm: "本当に削除しますか？" },
+                  class: "btn btn-danger btn-sm",
+                  form: { class: "d-inline-block m-0 p-0" } %>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
