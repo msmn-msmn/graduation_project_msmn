@@ -11,7 +11,7 @@ class TasksController < ApplicationController
 
   def create
     @task = current_user.tasks.build(task_params)
-     @task.draft = true
+    @task.draft = true
     @task.skip_estimates_validation = true
 
     Task.transaction do
