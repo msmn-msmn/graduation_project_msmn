@@ -30,7 +30,7 @@
                 <!-- 1日の作業時間 -->
                 <div class="mb-3">
                   <%= form.label :daily_task_time, "1日の作業時間（分）", class: "form-label" %>
-                  <%= form.number_field :daily_task_time, value: (@task.daily_task_time || 120), class: "form-control", min: 30, step: 30 %>
+                  <%= form.number_field :daily_task_time, value: (@task.daily_task_time || 30), class: "form-control", min: 30, step: 5 %>
                 </div>
               </div>
               
@@ -40,15 +40,15 @@
                 <div class="row">
                   <div class="col-4">
                     <%= form.label :estimate_min_days, "最短", class: "form-label small" %>
-                    <%= form.number_field :estimate_min_days, value: (@task.estimate_min_days || 3), class: "form-control", min: 1, step: 0.5 %>
+                    <%= form.number_field :estimate_min_days, value: (@task.estimate_min_days || 1), class: "form-control", min: 1, step: 1 %>
                   </div>
                   <div class="col-4">
                     <%= form.label :estimate_normal_days, "通常", class: "form-label small" %>
-                    <%= form.number_field :estimate_normal_days, value: (@task.estimate_normal_days || 5), class: "form-control", min: 1, step: 0.5 %>
+                    <%= form.number_field :estimate_normal_days, value: (@task.estimate_normal_days || 1), class: "form-control", min: 1, step: 1 %>
                   </div>
                   <div class="col-4">
                     <%= form.label :estimate_max_days, "最長", class: "form-label small" %>
-                    <%= form.number_field :estimate_max_days, value: (@task.estimate_max_days || 8), class: "form-control", min: 1, step: 0.5 %>
+                    <%= form.number_field :estimate_max_days, value: (@task.estimate_max_days || 1), class: "form-control", min: 1, step: 1 %>
                   </div>
                 </div>
                 
