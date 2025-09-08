@@ -10,7 +10,7 @@ class FixStepsPositionDefaultAndIndex < ActiveRecord::Migration[7.2]
     execute "UPDATE steps SET position = 1 WHERE position = 0"
 
     # 4) 非ユニークの複合インデックスを作り直す
-    add_index :steps, [:sub_task_id, :position], name: "index_steps_on_sub_task_id_and_position"
+    add_index :steps, [ :sub_task_id, :position ], name: "index_steps_on_sub_task_id_and_position"
   end
 
   def down
@@ -20,7 +20,7 @@ class FixStepsPositionDefaultAndIndex < ActiveRecord::Migration[7.2]
     change_column_default :steps, :position, from: 1, to: 0
 
     # 元の値(0)に完全には戻せないので、ここでは変更しないか、必要なら個別対応してください
-    add_index :steps, [:sub_task_id, :position],
+    add_index :steps, [ :sub_task_id, :position ],
               name: "index_steps_on_sub_task_id_and_position", unique: true
   end
 end

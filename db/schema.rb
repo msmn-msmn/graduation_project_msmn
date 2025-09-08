@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_08_114813) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_08_143834) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -54,10 +54,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_08_114813) do
     t.text "user_memo"
     t.integer "status", default: 0, null: false
     t.integer "priority", default: 0, null: false
-    t.integer "daily_task_time", null: false
-    t.integer "estimate_min_days", null: false
-    t.integer "estimate_normal_days", null: false
-    t.integer "estimate_max_days", null: false
+    t.integer "daily_task_time"
+    t.integer "estimate_min_days"
+    t.integer "estimate_normal_days"
+    t.integer "estimate_max_days"
     t.integer "calculated_estimated_days"
     t.integer "work_time"
     t.datetime "due_date"

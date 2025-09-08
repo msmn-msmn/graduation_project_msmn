@@ -11,12 +11,12 @@ class RenamePriorityToPositionInSubTasks < ActiveRecord::Migration[7.2]
 
     # ④ 並びや検索で使うなら、必要に応じて新しいインデックスを作成
     #    例: タスク内での順序取得を速くする複合インデックス
-    add_index :sub_tasks, [:task_id, :position]
+    add_index :sub_tasks, [ :task_id, :position ]
   end
 
   def down
     # upの逆順で戻せるようにしておく
-    remove_index :sub_tasks, column: [:task_id, :position]
+    remove_index :sub_tasks, column: [ :task_id, :position ]
 
     remove_column :sub_tasks, :position, :integer
 

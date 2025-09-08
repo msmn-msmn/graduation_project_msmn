@@ -18,9 +18,7 @@ class Task < ApplicationRecord
   validate :estimate_days_logical_order
   validate :due_date_future
 
-  with_options unless: -> { draft? || skip_estimates_validation } do
-    validates :daily_task_time, :estimate_min_days, :estimate_normal_days, :estimate_max_days, presence: true
-  end
+
 
   # タスク作業状態
   enum status: {
@@ -73,9 +71,9 @@ class Task < ApplicationRecord
 
   # 締切日の論理チェック
   def due_date_future
-    return unless due_date
+    return if due_date.blank?
 
-    if due_date < Time.current
+    if due_date < Time.zone.now
       errors.add(:due_date, "は現在時刻より未来である必要があります")
     end
   end
@@ -90,11 +88,6 @@ class Task < ApplicationRecord
 
   # 完了日時記録
   def update_completion_time
-    if completed?
-      self.completed_at = Time.current
-    else
-      self.completed_at = nil
-    end
-    save if changed?
+    update_column(:completed_at, completed? ? Time.current : nil)
   end
 end
