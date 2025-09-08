@@ -1,10 +1,13 @@
 class Step < ApplicationRecord
   belongs_to :user
   belongs_to :sub_task
+  acts_as_list scope: :sub_task, column: :position, add_new_at: :bottom
 
   validates :name, presence: true
   validates :status, presence: true
   validates :position, presence: true
+
+  before_validation :set_user_from_sub_task, on: :create
 
   # enum定義
   enum status: {
@@ -15,9 +18,11 @@ class Step < ApplicationRecord
     cancelled: 4       # キャンセル
   }
 
-  enum position: {
-    first_row: 0,      # 1段目
-    second_row: 1,     # 2段目
-    third_row: 2      # 3段目
-  }
+
+
+  private
+
+  def set_user_from_sub_task
+    self.user_id ||= sub_task&.user_id
+  end
 end

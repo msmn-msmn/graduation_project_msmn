@@ -16,10 +16,9 @@ class TasksController < ApplicationController
 
     Task.transaction do
       @task.save!                               # まず Task をドラフト保存
-      dummy_data!(@task)              # 次に SubTask / Step をダミーで作成
     end
 
-    render :breakdown_result                    # 分解結果の編集画面へ
+    render :breakdown_result                    # 分解結果の表示画面へ
   rescue ActiveRecord::RecordInvalid => e
     flash.now[:alert] = e.record.errors.full_messages.to_sentence
     render :new, status: :unprocessable_entity
@@ -65,7 +64,10 @@ class TasksController < ApplicationController
     @task.skip_estimates_validation = true
     Rails.logger.debug params.inspect
     # ダミーデータを割り当て
-    @task.assign_attributes(dummy_data[:task])
+    # @task.assign_attributes(dummy_data[:task])
+
+    decomposition_task = TaskDecompositionService.new.call(@task)  # => { task: { sub_tasks_attributes: [...] } }
+    @task.assign_attributes(decomposition_task[:task])
 
     if @task.save
       # 保存に成功したら分解結果画面へ
@@ -98,64 +100,38 @@ class TasksController < ApplicationController
   def dummy_data
   {
     task: {
-      user_id: current_user.id,
-      name: "サンプルタスク",
-      description_for_ai: "AI分解用のサンプルタスク説明",
-      due_date: "2025-12-29",
-      daily_task_time: 120,
-      estimate_min_days: 3,
-      estimate_normal_days: 5,
-      estimate_max_days: 8,
-      priority: 1,
-      status: "not_started",
       # SubTasks を追加
       sub_tasks_attributes: [
         {
-          user_id: current_user.id,
           name: "要件定義・設計",
-          status: "not_started",
-          priority: 0,
-          sub_due_date: "2025-12-30", # 👈 追加
           steps_attributes: [
-            { name: "ユーザー認証の要件整理", status: "not_started", position: 0, user_id: current_user.id },
-            { name: "データベース設計",       status: "not_started", position: 1, user_id: current_user.id },
-            { name: "UI設計",                 status: "not_started", position: 2, user_id: current_user.id }
+            { name: "ユーザー認証の要件整理" },
+            { name: "データベース設計" },
+            { name: "UI設計" }
           ]
         },
         {
-          user_id: current_user.id,
           name: "バックエンド実装",
-          status: "not_started",
-          priority: 1,
-          sub_due_date: "2025-12-31",
           steps_attributes: [
-            { name: "ユーザーモデルの作成",     status: "not_started", position: 0, user_id: current_user.id },
-            { name: "認証コントローラーの実装", status: "not_started", position: 1, user_id: current_user.id },
-            { name: "セッション管理の実装",     status: "not_started", position: 2, user_id: current_user.id }
+            { name: "ユーザーモデルの作成" },
+            { name: "認証コントローラーの実装" },
+            { name: "セッション管理の実装" }
           ]
         },
         {
-          user_id: current_user.id,
           name: "フロントエンド実装",
-          status: "not_started",
-          priority: 2,
-          sub_due_date: "2026-01-02",
           steps_attributes: [
-            { name: "ログイン画面の作成",   status: "not_started", position: 0, user_id: current_user.id },
-            { name: "新規登録画面の作成",   status: "not_started", position: 1, user_id: current_user.id },
-            { name: "ユーザー情報画面の作成", status: "not_started", position: 2, user_id: current_user.id }
+            { name: "ログイン画面の作成" },
+            { name: "新規登録画面の作成" },
+            { name: "ユーザー情報画面の作成" }
           ]
         },
         {
-          user_id: current_user.id,
           name: "テスト・デバッグ",
-          status: "not_started",
-          priority: 3,
-          sub_due_date: "2026-01-05",
           steps_attributes: [
-            { name: "単体テストの作成",   status: "not_started", position: 0, user_id: current_user.id },
-            { name: "統合テストの実施",   status: "not_started", position: 1, user_id: current_user.id },
-            { name: "バグ修正・調整",     status: "not_started", position: 2, user_id: current_user.id }
+            { name: "単体テストの作成" },
+            { name: "統合テストの実施" },
+            { name: "バグ修正・調整" }
           ]
         }
       ]
@@ -168,8 +144,8 @@ end
                               :daily_task_time, :estimate_min_days, :estimate_normal_days,
                               :estimate_max_days, :calculated_estimated_days, :due_date,
                               sub_tasks_attributes: [
-                              :id, :name, :status, :priority, :_destroy,
+                              :id, :name, :status, :_destroy,
                               steps_attributes: [ :id, :name, :status,
-                              :due_date, :priority, :position, :_destroy ] ])
+                              :due_date, :priority, :_destroy ] ])
   end
 end
