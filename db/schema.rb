@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_03_162903) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_08_114813) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,13 +19,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_03_162903) do
     t.bigint "user_id", null: false
     t.string "name", null: false
     t.integer "status", default: 0, null: false
-    t.integer "position", default: 0, null: false
+    t.integer "position", default: 1, null: false
     t.datetime "due_date"
     t.datetime "completed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["status"], name: "index_steps_on_status"
-    t.index ["sub_task_id", "position"], name: "index_steps_on_sub_task_id_and_position", unique: true
+    t.index ["sub_task_id", "position"], name: "index_steps_on_sub_task_id_and_position"
     t.index ["sub_task_id"], name: "index_steps_on_sub_task_id"
     t.index ["user_id"], name: "index_steps_on_user_id"
   end
@@ -35,14 +35,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_03_162903) do
     t.bigint "task_id", null: false
     t.string "name", null: false
     t.integer "status", default: 0, null: false
-    t.integer "priority", default: 0, null: false
     t.integer "sub_work_time"
     t.datetime "sub_due_date"
     t.datetime "completed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["priority"], name: "index_sub_tasks_on_priority"
+    t.integer "position", default: 1, null: false
     t.index ["status"], name: "index_sub_tasks_on_status"
+    t.index ["task_id", "position"], name: "index_sub_tasks_on_task_id_and_position"
     t.index ["task_id"], name: "index_sub_tasks_on_task_id"
     t.index ["user_id"], name: "index_sub_tasks_on_user_id"
   end

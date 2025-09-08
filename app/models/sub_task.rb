@@ -3,13 +3,16 @@ class SubTask < ApplicationRecord
   belongs_to :task
   has_many :steps, dependent: :destroy
   accepts_nested_attributes_for :steps, allow_destroy: true
+  acts_as_list scope: :task, column: :position, add_new_at: :bottom
 
   validates :name, presence: true, length: { maximum: 255 }
   validates :sub_work_time, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
-  validates :sub_due_date, presence: true
+
 
   validate :belongs_to_same_user
   validate :sub_due_date_not_in_past
+
+  before_validation :set_user_from_task, on: :create
 
   # enum定義
   enum status: {
@@ -20,12 +23,6 @@ class SubTask < ApplicationRecord
     cancelled: 4       # キャンセル
   }
 
-  enum priority: {
-    position_1: 0,     # 1段目
-    position_2: 1,     # 2段目
-    position_3: 2,     # 3段目
-    position_4: 3      # 4段目
-  }
 
   # スコープ
   scope :by_priority, -> { order(:priority) }
@@ -70,6 +67,10 @@ class SubTask < ApplicationRecord
     if sub_due_date < Date.current
       errors.add(:sub_due_date, "は今日以降の日付を設定してください")
     end
+  end
+
+  def set_user_from_task
+    self.user ||= task&.user
   end
 
   # コールバック：完了時刻を設定
