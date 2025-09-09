@@ -10,15 +10,15 @@ module App
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.2
-    config.time_zone = 'Asia/Tokyo'
+    config.time_zone = "Asia/Tokyo"
     config.active_record.default_timezone = :local
 
 
     config.i18n.default_locale    = :ja
-    config.i18n.fallbacks         = [:en]  # jaに無いキーは英語へフォールバック
+    config.i18n.fallbacks         = [ :en ]  # jaに無いキーは英語へフォールバック
 
     # locales 配下をネストしても読み込む
-    config.i18n.load_path += Dir[Rails.root.join('config/locales/**/*.{rb,yml}')]
+    config.i18n.load_path += Dir[Rails.root.join("config/locales/**/*.{rb,yml}")]
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
