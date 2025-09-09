@@ -3,7 +3,7 @@
     <div class="d-flex align-items-center">
       <i class="fas fa-exclamation-triangle me-2"></i>
       <strong>
-        <%= pluralize(resource.errors.count, "個のエラー") %>があります
+        <%= pluralize(resource.errors.count, "件のエラー", "件のエラー") %>があります
       </strong>
     </div>
     <hr class="my-2">
