@@ -1,0 +1,28 @@
+ja:
+  activerecord:
+    models:
+      task: タスク
+      sub_task: 小タスク
+      step: ステップ
+      user: ユーザー
+    attributes:
+      user:
+        username: ユーザー名
+      task:
+        name: タスク名
+        description_for_ai: 分解用説明
+        due_date: 期限
+        daily_task_time: 1日の作業時間（分）
+        estimate_min_days: 最低必要日数
+        estimate_normal_days: 標準日数
+        estimate_max_days: 最大見込み日数
+        priority: 優先度
+        status: 状態
+      sub_task:
+        name: 小タスク名
+        sub_due_date: 小タスク期限
+        priority: 優先度
+        status: 状態
+      step:
+        name: ステップ名
+        due_date: ステップ期限
