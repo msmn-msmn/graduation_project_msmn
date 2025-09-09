@@ -1,45 +1,75 @@
-<div class="container mt-5">
+<!-- app/views/devise/sessions/new.html.erb -->
+<div class="container">
   <div class="row justify-content-center">
-    <div class="col-md-5">
-      <div class="card">
-        <div class="card-header text-center bg-light">
-          <h3 class="mb-0">ログイン</h3>
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h2 class="text-center mb-0">
+            <i class="fas fa-sign-in-alt me-2"></i>ログイン
+          </h2>
         </div>
+
         <div class="card-body p-4">
-          <%= form_for(resource, as: resource_name, url: session_path(resource_name), local: true) do |f| %>
-            
+          <%= form_for(resource, as: resource_name, url: session_path(resource_name),
+                       local: true, html: { class: "needs-validation", novalidate: true }) do |f| %>
+
+            <!-- エラーメッセージ -->
+            <%= render "devise/shared/error_messages", resource: resource %>
+
+            <!-- メールアドレス -->
             <div class="mb-3">
               <%= f.label :email, "メールアドレス", class: "form-label" %>
-              <%= f.email_field :email, 
-                  autofocus: true, 
-                  autocomplete: "email", 
-                  class: "form-control",
-                  placeholder: "メールアドレスを入力" %>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="fas fa-envelope"></i>
+                </span>
+                <%= f.email_field :email,
+                      autofocus: true,
+                      autocomplete: "email",
+                      class: "form-control",
+                      placeholder: "メールアドレスを入力",
+                      required: true %>
+              </div>
             </div>
 
+            <!-- パスワード -->
             <div class="mb-3">
               <%= f.label :password, "パスワード", class: "form-label" %>
-              <%= f.password_field :password, 
-                  autocomplete: "current-password", 
-                  class: "form-control",
-                  placeholder: "パスワードを入力" %>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="fas fa-lock"></i>
+                </span>
+                <%= f.password_field :password,
+                      autocomplete: "current-password",
+                      class: "form-control",
+                      placeholder: "パスワードを入力",
+                      required: true %>
+                <button class="btn btn-outline-secondary" type="button" id="loginPasswordToggle">
+                  <i class="fas fa-eye" id="loginPasswordIcon"></i>
+                </button>
+              </div>
             </div>
 
             <% if devise_mapping.rememberable? %>
+              <!-- ログイン状態の保持 -->
               <div class="mb-3">
                 <div class="form-check">
-                  <%= f.check_box :remember_me, class: "form-check-input" %>
-                  <%= f.label :remember_me, "ログイン状態を保持", class: "form-check-label" %>
+                  <%= f.check_box :remember_me, class: "form-check-input", id: "rememberMeCheck" %>
+                  <%= f.label :remember_me, "ログイン状態を保持", class: "form-check-label", for: "rememberMeCheck" %>
                 </div>
               </div>
             <% end %>
 
-            <div class="d-grid">
-              <%= f.submit "ログイン", class: "btn btn-primary" %>
+            <!-- 送信ボタン（登録画面と統一のサイズ/スピナー） -->
+            <div class="d-grid mb-3">
+              <%= f.submit "ログイン",
+                    class: "btn btn-primary btn-lg",
+                    data: { disable_with: '<i class="fas fa-spinner fa-spin me-2"></i>処理中...' } %>
             </div>
           <% end %>
 
-          <div class="text-center mt-3">
+          <!-- 下部リンクも同じ配置に -->
+          <div class="text-center">
             <%= render "devise/shared/links" %>
           </div>
         </div>
@@ -47,3 +77,20 @@
     </div>
   </div>
 </div>
+
+<!-- パスワード表示切り替え（登録画面と同等の操作感） -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const toggleBtn = document.getElementById('loginPasswordToggle');
+  const pwdField = document.querySelector('input[name="<%= resource_name %>[password]"]');
+  const icon = document.getElementById('loginPasswordIcon');
+
+  if (toggleBtn && pwdField && icon) {
+    toggleBtn.addEventListener('click', function() {
+      const type = pwdField.getAttribute('type') === 'password' ? 'text' : 'password';
+      pwdField.setAttribute('type', type);
+      icon.className = (type === 'password') ? 'fas fa-eye' : 'fas fa-eye-slash';
+    });
+  }
+});
+</script>
