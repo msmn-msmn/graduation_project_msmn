@@ -2,7 +2,8 @@ class SubTask < ApplicationRecord
   belongs_to :user
   belongs_to :task
   has_many :steps, dependent: :destroy
-  accepts_nested_attributes_for :steps, allow_destroy: true
+  accepts_nested_attributes_for :steps, allow_destroy: true,
+    reject_if: ->(attrs) { attrs["name"].blank? && attrs["due_date"].blank? }
   acts_as_list scope: :task, column: :position, add_new_at: :bottom
 
   validates :name, presence: true, length: { maximum: 255 }

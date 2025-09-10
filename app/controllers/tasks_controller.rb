@@ -90,6 +90,13 @@ class TasksController < ApplicationController
     end
   end
 
+  # 分解結果のドラフト破棄
+  def discard
+    task = current_user.tasks.find(params[:id])
+    task.destroy!
+    redirect_to new_task_path, notice: "下書きを破棄しました。"
+  end
+
   private
 
   def set_task

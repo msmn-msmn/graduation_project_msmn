@@ -18,11 +18,20 @@ ja:
         estimate_max_days: 最大見込み日数
         priority: 優先度
         status: 状態
+        sub_tasks: 小タスク
       sub_task:
         name: 小タスク名
         sub_due_date: 小タスク期限
         priority: 優先度
         status: 状態
+        steps: ステップ
       step:
         name: ステップ名
         due_date: ステップ期限
+    errors:
+      models:
+        task:
+          attributes:
+            sub_tasks:
+              too_many_sub_tasks: "は最大%{count}件までです"
+              too_many_steps: "のステップは最大%{count}件までです"
