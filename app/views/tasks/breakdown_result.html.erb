@@ -69,12 +69,12 @@
             <!-- 分解されたタスク一覧 -->
             <h5 class="mt-4">小タスク一覧</h5>
 
-<!-- ★ 小タスク全体を Stimulus コントローラで包む -->
+<!--  小タスク全体を Stimulus コントローラで包む -->
 <div data-controller="nested">
-  <!-- ★ 既存の小タスクたちを入れる器（追加先） -->
+  <!--  既存の小タスクたちを入れる器（追加先） -->
   <div data-nested-target="container">
     <%= form.fields_for :sub_tasks do |sf| %>
-      <!-- ★ 個々のアイテムを identify するためのマーカー -->
+      <!--  個々のアイテムを identify するためのマーカー -->
       <div class="border p-3 mb-3 rounded" data-nested-item>
         <div class="mb-2 d-flex justify-content-between gap-2">
           <div class="flex-grow-1">
@@ -88,12 +88,12 @@
             <%= sf.hidden_field :position, value: sf.object.try(:position) %>
           </div>
 
-          <!-- ★ 1行削除ボタン（_destroy=1 を立てて非表示にする） -->
+          <!--  1行削除ボタン（_destroy=1 を立てて非表示にする） -->
           <button type="button" class="btn btn-outline-danger btn-sm align-self-start"
                   data-action="click->nested#remove">小タスク削除</button>
         </div>
 
-        <!-- ▼ ステップの入れ子：ステップ専用の nested を内側にもう一段 -->
+        <!--  ステップの入れ子：ステップ専用の nested を内側にもう一段 -->
         <div class="ms-1" data-controller="nested">
           <div data-nested-target="container">
             <%= sf.fields_for :steps do |stf| %>
@@ -103,12 +103,12 @@
                 <%= stf.hidden_field :_destroy %>
                 <%= stf.hidden_field :position, value: stf.object.try(:position) %>
                 <button type="button" class="btn btn-outline-danger btn-sm"
-        data-action="click->nested#remove">ステップ削除</button>
+                  data-action="click->nested#remove">ステップ削除</button>
               </div>
             <% end %>
           </div>
 
-          <!-- ★ ステップのテンプレート（NEW_STEP をユニーク置換して挿入） -->
+          <!--  ステップのテンプレート（NEW_STEP をユニーク置換して挿入） -->
           <template data-nested-target="template">
             <%= sf.fields_for :steps, Step.new, child_index: "NEW_STEP" do |stf| %>
               <div class="ms-3 mb-2" data-nested-item>
@@ -117,7 +117,7 @@
                 <%= stf.hidden_field :_destroy %>
                 <%= stf.hidden_field :position %>
                 <button type="button" class="btn btn-outline-danger btn-sm"
-        data-action="click->nested#remove">ステップ削除</button>
+                  data-action="click->nested#remove">ステップ削除</button>
               </div>
             <% end %>
           </template>
@@ -125,12 +125,12 @@
           <button type="button" class="btn btn-outline-primary btn-sm"
         data-action="click->nested#add">+ ステップを追加</button>
         </div>
-        <!-- ▲ ステップ入れ子 ここまで -->
+        <!--  ステップ入れ子 ここまで -->
       </div>
     <% end %>
   </div>
 
-  <!-- ★ 小タスクのテンプレート（NEW_SUBTASK をユニーク置換） -->
+  <!--  小タスクのテンプレート（NEW_SUBTASK をユニーク置換） -->
   <template data-nested-target="template">
     <%= form.fields_for :sub_tasks, SubTask.new, child_index: "NEW_SUBTASK" do |sf| %>
       <div class="border p-3 mb-3 rounded" data-nested-item>
@@ -171,7 +171,7 @@
     <% end %>
   </template>
 
-  <!-- ★ 小タスクを1行追加 -->
+  <!--  小タスクを1行追加 -->
   <button type="button" class="btn btn-outline-primary"
         data-action="click->nested#add">+ 小タスクを追加</button>
 

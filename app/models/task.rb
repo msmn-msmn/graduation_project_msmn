@@ -18,7 +18,11 @@ class Task < ApplicationRecord
   # カスタムバリデーション
   validate :estimate_days_logical_order
   validate :due_date_future
-
+  MAX_SUBTASKS = 4
+  validate :sub_tasks_limit
+  MAX_STEPS = 3
+  validate :sub_tasks_steps_limit
+  
 
 
   # タスク作業状態
@@ -76,6 +80,22 @@ class Task < ApplicationRecord
 
     if due_date < Time.zone.now
       errors.add(:due_date, "は現在時刻より未来である必要があります")
+    end
+  end
+
+  # 1タスクに設定できる小タスクの最大設定数
+  def sub_tasks_limit
+    active = sub_tasks.reject(&:marked_for_destruction?)
+    errors.add(:sub_tasks, :too_many_sub_tasks, count: MAX_SUBTASKS) if active.size > MAX_SUBTASKS
+  end
+
+  # 1小タスクに設定できるステップの最大設定数
+  def sub_tasks_steps_limit
+    sub_tasks.each do |st|
+      active = st.steps.reject(&:marked_for_destruction?)
+      if active.size > MAX_STEPS
+        errors.add(:sub_tasks, :too_many_steps, count: MAX_STEPS)
+      end
     end
   end
 

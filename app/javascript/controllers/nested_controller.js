@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["container", "template"]
+  static targets = ["container", "template", "addButton", "warning"]
 
   connect() { console.log("nested connected") }  // ← デバッグ
 
