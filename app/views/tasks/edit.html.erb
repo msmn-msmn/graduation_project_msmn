@@ -1,3 +1,4 @@
+<% content_for :suppress_layout_alert, true %>
 <div class="container mt-4">
   <div class="row justify-content-center">
     <div class="col-md-10">
@@ -5,10 +6,10 @@
         <div class="card-header">
           <h3 class="mb-0">タスクの編集</h3>
         </div>
-        
+
         <div class="card-body">
           <%= form_with model: @task, local: true, html: { id: "task-edit-form-#{@task.id}" } do |form| %>
-            
+
             <!-- エラーメッセージ -->
             <% if @task.errors.any? %>
               <div class="alert alert-danger">
@@ -59,62 +60,131 @@
             <div class="row mb-4">
               <div class="col-md-6">
                 <%= form.label :status, "作業状態", class: "form-label" %>
-                <%= form.select :status, 
-                    options_for_select([['未着手','not_started'],['作業中','in_progress'],['完了','completed'],['保留','on_hold'],['キャンセル','cancelled']], @task.status), 
+                <%= form.select :status,
+                    options_for_select([['未着手','not_started'],['作業中','in_progress'],['完了','completed'],['保留','on_hold'],['キャンセル','cancelled']], @task.status),
                     {}, { class: "form-select" } %>
               </div>
               <div class="col-md-6">
                 <%= form.label :priority, "優先度", class: "form-label" %>
-                <%= form.select :priority, 
-                    options_for_select([['低','low'],['中','medium'],['高','high'],['緊急','urgent']], @task.priority), 
+                <%= form.select :priority,
+                    options_for_select([['低','low'],['中','medium'],['高','high'],['緊急','urgent']], @task.priority),
                     {}, { class: "form-select" } %>
               </div>
             </div>
 
-            <!-- 小タスク編集 -->
+            <!-- 小タスク（任意追加・任意削除対応） -->
             <h5 class="mt-4">小タスク</h5>
-            <%= form.fields_for :sub_tasks do |sf| %>
-              <div class="border rounded p-3 mb-3">
-                <div class="mb-2">
-                  <%= sf.text_field :name, placeholder: "小タスク名", class: "form-control mb-2" %>
-                  <%= sf.select :status, [["未着手","not_started"],["作業中","in_progress"],["完了","completed"]], {}, { class: "form-select mb-2" } %>
-                  <div class="form-check">
-                    <%= sf.check_box :_destroy, class: "form-check-input" %>
-                    <%= sf.label :_destroy, "削除", class: "form-check-label" %>
-                  </div>
-                </div>
 
-                <!-- ステップ編集 -->
-                <%= sf.fields_for :steps do |stf| %>
-                  <div class="ms-3 mb-2 border-start ps-3">
-                    <%= stf.text_field :name, placeholder: "ステップ名", class: "form-control mb-1" %>
-                    <%= stf.date_field :due_date, class: "form-control mb-1" %>
-                    <div class="form-check">
-                      <%= stf.check_box :_destroy, class: "form-check-input" %>
-                      <%= stf.label :_destroy, "削除", class: "form-check-label" %>
+            <div data-controller="nested">
+              <div data-nested-target="container">
+                <%= form.fields_for :sub_tasks do |sf| %>
+                  <div class="border rounded p-3 mb-3" data-nested-item>
+                    <div class="mb-2 d-flex justify-content-between gap-2">
+                      <div class="flex-grow-1">
+                        <%= sf.text_field :name, placeholder: "小タスク名", class: "form-control mb-2" %>
+                        <%= sf.select :status,
+                              [["未着手","not_started"],["作業中","in_progress"],["完了","completed"]],
+                              {}, { class: "form-select mb-2" } %>
+                        <%= sf.hidden_field :_destroy %>
+                        <%= sf.hidden_field :position, value: sf.object.try(:position) %>
+                      </div>
+
+                      <button type="button" class="btn btn-outline-danger btn-sm align-self-start"
+                              data-action="click->nested#remove">小タスク削除</button>
                     </div>
+
+                    <!-- ステップ入れ子 -->
+                    <div class="ms-1" data-controller="nested">
+                      <div data-nested-target="container">
+                        <%= sf.fields_for :steps do |stf| %>
+                          <div class="ms-3 mb-2" data-nested-item>
+                            <%= stf.text_field :name, placeholder: "ステップ名", class: "form-control mb-1" %>
+                            <%= stf.date_field :due_date, class: "form-control mb-1" %>
+                            <%= stf.hidden_field :_destroy %>
+                            <%= stf.hidden_field :position, value: stf.object.try(:position) %>
+                            <button type="button" class="btn btn-outline-danger btn-sm"
+                                    data-action="click->nested#remove">ステップ削除</button>
+                          </div>
+                        <% end %>
+                      </div>
+
+                      <template data-nested-target="template">
+                        <%= sf.fields_for :steps, Step.new, child_index: "NEW_STEP" do |stf| %>
+                          <div class="ms-3 mb-2" data-nested-item>
+                            <%= stf.text_field :name, placeholder: "ステップ名", class: "form-control mb-1" %>
+                            <%= stf.date_field :due_date, class: "form-control mb-1" %>
+                            <%= stf.hidden_field :_destroy %>
+                            <%= stf.hidden_field :position %>
+                            <button type="button" class="btn btn-outline-danger btn-sm"
+                                    data-action="click->nested#remove">ステップ削除</button>
+                          </div>
+                        <% end %>
+                      </template>
+
+                      <button type="button" class="btn btn-outline-primary btn-sm"
+                              data-action="click->nested#add">+ ステップを追加</button>
+                    </div>
+                    <!-- /ステップ入れ子 -->
                   </div>
                 <% end %>
               </div>
-            <% end %>
-            <% end %>
+
+              <template data-nested-target="template">
+                <%= form.fields_for :sub_tasks, SubTask.new, child_index: "NEW_SUBTASK" do |sf| %>
+                  <div class="border rounded p-3 mb-3" data-nested-item>
+                    <div class="mb-2 d-flex justify-content-between gap-2">
+                      <div class="flex-grow-1">
+                        <%= sf.text_field :name, placeholder: "小タスク名", class: "form-control mb-2" %>
+                        <%= sf.select :status,
+                              [["未着手","not_started"],["作業中","in_progress"],["完了","completed"]],
+                              {}, { class: "form-select mb-2" } %>
+                        <%= sf.hidden_field :_destroy %>
+                        <%= sf.hidden_field :position %>
+                      </div>
+
+                      <button type="button" class="btn btn-outline-danger btn-sm align-self-start"
+                              data-action="click->nested#remove">小タスク削除</button>
+                    </div>
+
+                    <div class="ms-1" data-controller="nested">
+                      <div data-nested-target="container"></div>
+
+                      <template data-nested-target="template">
+                        <%= sf.fields_for :steps, Step.new, child_index: "NEW_STEP" do |stf| %>
+                          <div class="ms-3 mb-2" data-nested-item>
+                            <%= stf.text_field :name, placeholder: "ステップ名", class: "form-control mb-1" %>
+                            <%= stf.date_field :due_date, class: "form-control mb-1" %>
+                            <%= stf.hidden_field :_destroy %>
+                            <%= stf.hidden_field :position %>
+                            <button type="button" class="btn btn-outline-danger btn-sm"
+                                    data-action="click->nested#remove">ステップ削除</button>
+                          </div>
+                        <% end %>
+                      </template>
+
+                      <button type="button" class="btn btn-outline-primary btn-sm"
+                              data-action="click->nested#add">+ ステップを追加</button>
+                    </div>
+                  </div>
+                <% end %>
+              </template>
+
+              <button type="button" class="btn btn-outline-primary"
+                      data-action="click->nested#add">+ 小タスクを追加</button>
+            </div>
 
             <!-- ボタン -->
             <div class="d-flex justify-content-between mt-4 align-items-center">
-            <%= link_to "一覧へ戻る", user_root_path, class: "btn btn-secondary" %>
-            <div class="d-flex gap-2">
-              <%= button_tag "更新",
-                    type: "submit",
-                    form: "task-edit-form-#{@task.id}",
-                    class: "btn btn-primary" %>
-
-              <%= button_to "削除", task_path(@task),
-                    method: :delete,
-                    form: { data: { turbo_confirm: "本当に削除しますか？" } },
-                    class: "btn btn-danger" %>
+              <%= link_to "一覧へ戻る", user_root_path, class: "btn btn-secondary" %>
+              <div class="d-flex gap-2">
+                <%= form.submit "更新", class: "btn btn-primary" %>
+                <%= link_to "削除", task_path(@task),
+                      data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" },
+                      class: "btn btn-danger" %>
+              </div>
             </div>
-          </div>
 
+          <% end %> <!-- ← form_with を必ず閉じる！ -->
         </div>
       </div>
     </div>
