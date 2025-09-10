@@ -188,7 +188,10 @@
 
             <!-- ボタン -->
             <div class="d-flex justify-content-between mt-3">
-              <%= link_to "戻る", new_task_path, class: "btn btn-secondary" %>
+              <%= link_to "戻る（下書きを破棄）",
+                discard_task_path(@task),
+                data: { turbo_method: :delete, turbo_confirm: "下書きを破棄します。よろしいですか？" },
+                class: "btn btn-secondary" %>
               <%= form.submit "タスクを登録", class: "btn btn-success btn-lg" %>
             </div>
           

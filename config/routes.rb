@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     member do
       get :breakdown_result
       patch :finalize           # 分解結果画面からの“本保存”
+      delete :discard           # 分解結果の下書き破棄
     end
   end
 
