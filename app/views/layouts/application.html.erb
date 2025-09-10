@@ -23,8 +23,10 @@
     <% if notice %>
       <p class="notice"><%= notice %></p>
     <% end %>
-    <% if alert %>
-      <p class="alert"><%= alert %></p>
+    <% unless content_for?(:suppress_layout_alert) %>
+      <% if alert %>
+        <p class="alert"><%= alert %></p>
+      <% end %>
     <% end %>
     <%= yield %>
   </body>

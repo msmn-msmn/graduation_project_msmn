@@ -6,38 +6,38 @@
           <h3 class="mb-0">AI分解結果の確認・調整</h3>
           <small class="text-muted">内容を確認し、必要に応じて修正してください</small>
         </div>
-        
+
         <div class="card-body">
           <%= form_with model: @task, url: finalize_task_path(@task), method: :patch, local: true do |form| %>
-            
+
             <!-- 基本タスク情報 -->
             <div class="row mb-4">
               <div class="col-md-6">
                 <h5>基本情報</h5>
-                
+
                 <!-- タスク名 -->
                 <div class="mb-3">
                   <%= form.label :name, "タスク名", class: "form-label" %>
-                  <%= form.text_field :name, class: "form-control", 
+                  <%= form.text_field :name, class: "form-control",
                       placeholder: "タスク名を入力してください（3文字以上50字以内）", required: true %>
                 </div>
-                
+
                 <!-- 期限 -->
                 <div class="mb-3">
                   <%= form.label :due_date, "期限", class: "form-label" %>
                   <%= form.date_field :due_date, value: (@task.due_date || 2.weeks.from_now.to_date), class: "form-control" %>
                 </div>
-                
+
                 <!-- 1日の作業時間 -->
                 <div class="mb-3">
                   <%= form.label :daily_task_time, "1日の作業時間（分）", class: "form-label" %>
                   <%= form.number_field :daily_task_time, value: (@task.daily_task_time || 30), class: "form-control", min: 30, step: 5 %>
                 </div>
               </div>
-              
+
               <div class="col-md-6">
                 <h5>完了予定日数</h5>
-                
+
                 <div class="row">
                   <div class="col-4">
                     <%= form.label :estimate_min_days, "最低必要日数", class: "form-label small" %>
@@ -52,7 +52,7 @@
                     <%= form.number_field :estimate_max_days, value: (@task.estimate_max_days || 1), class: "form-control", min: 1, step: 1 %>
                   </div>
                 </div>
-                
+
                 <div class="row mt-3">
                   <div class="col-6">
                     <%= form.label :priority, "優先度", class: "form-label" %>
@@ -178,7 +178,7 @@
             <!-- ヒント -->
             <div class="alert alert-info mt-3">
               <small>
-                <strong>💡 ヒント:</strong> 
+                <strong>💡 ヒント:</strong>
                 この分解結果は参考です。実際のプロジェクトに合わせて調整してください。
               </small>
             </div>
@@ -194,7 +194,7 @@
                 class: "btn btn-secondary" %>
               <%= form.submit "タスクを登録", class: "btn btn-success btn-lg" %>
             </div>
-          
+
           <% end %>
         </div>
       </div>
