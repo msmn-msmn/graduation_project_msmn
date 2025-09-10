@@ -2,7 +2,7 @@ class Task < ApplicationRecord
   belongs_to :user
   has_many :sub_tasks, dependent: :destroy
   accepts_nested_attributes_for :sub_tasks, allow_destroy: true,
-    reject_if: ->(attrs){ attrs['name'].blank? }
+    reject_if: ->(attrs) { attrs["name"].blank? }
 
   # 基本項目のバリデーション（常に適用）
   validates :name, presence: true, length: { minimum: 3, maximum: 50 }
@@ -22,8 +22,6 @@ class Task < ApplicationRecord
   validate :sub_tasks_limit
   MAX_STEPS = 3
   validate :sub_tasks_steps_limit
-  
-
 
   # タスク作業状態
   enum status: {
