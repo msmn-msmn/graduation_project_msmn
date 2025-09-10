@@ -1,3 +1,4 @@
+<% content_for :suppress_layout_alert, true %>
 <div class="container mt-4">
   <div class="row">
     <div class="col-12">
@@ -9,6 +10,18 @@
 
         <div class="card-body">
           <%= form_with model: @task, url: finalize_task_path(@task), method: :patch, local: true do |form| %>
+
+            <!-- エラーメッセージ -->
+            <% if @task.errors.any? %>
+              <div class="alert alert-danger">
+                <h5><%= pluralize(@task.errors.count, "件のエラー", "件のエラー") %> が発生しました:</h5>
+                <ul class="mb-0">
+                  <% @task.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
 
             <!-- 基本タスク情報 -->
             <div class="row mb-4">
