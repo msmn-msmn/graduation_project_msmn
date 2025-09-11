@@ -77,7 +77,9 @@ Rails.application.configure do
   # メール送信設定
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
-
+  config.action_mailer.default_options = {
+    from: Settings.mailer.from
+  }
   # Disable caching for Action Mailer templates even if Action Controller
   # caching is enabled.
   config.action_mailer.perform_caching = false
@@ -91,7 +93,7 @@ Rails.application.configure do
     address: "smtp.gmail.com",                  # SMTPサーバーのアドレス（固定）
     port: 587,                                  # SMTPサーバーのポート（固定）
     domain: "gmail.com",                        # ドメイン名
-    user_name: ENV["GMAIL_ADRESS"],              # 認証用メールアドレス（変数）
+    user_name: ENV["GMAIL_ADDRESS"],              # 認証用メールアドレス（変数）
     password: ENV["GMAIL_PASSWORD"],             # アプリパスワード（変数）
     authentication: "plain",                    # 認証方式（固定）
     enable_starttls_auto: true,                 # TLS暗号化（固定
