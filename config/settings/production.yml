@@ -3,4 +3,4 @@ default_url_options:
   protocol: 'https'
 
 mailer:
-  from: 'dev-noreply@yourapp.com'
+  from: 'cat_hand_schedule@renderapp.com'
