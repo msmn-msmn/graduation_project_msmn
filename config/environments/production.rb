@@ -95,7 +95,7 @@ Rails.application.configure do
     password: ENV["GMAIL_PASSWORD"],             # アプリパスワード（変数）
     authentication: "plain",                    # 認証方式（固定）
     enable_starttls_auto: true,                 # TLS暗号化（固定
-    open_timeout: 30,
+    open_timeout: 100,
     read_timeout: 10
   }
 
