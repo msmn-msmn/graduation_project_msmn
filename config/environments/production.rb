@@ -91,8 +91,8 @@ Rails.application.configure do
     address: "smtp.gmail.com",                  # SMTPサーバーのアドレス（固定）
     port: 587,                                  # SMTPサーバーのポート（固定）
     domain: "gmail.com",                        # ドメイン名
-    user_name: ENV["GMAIL_ADDRESS"],              # 認証用メールアドレス（変数）
-    password: ENV["GMAIL_PASSWORD"],             # アプリパスワード（変数）
+    user_name: ENV.fetch("GMAIL_ADDRESS"),              # 認証用メールアドレス（変数）
+    password: ENV.fetch("GMAIL_PASSWORD"),             # アプリパスワード（変数）
     authentication: "plain",                    # 認証方式（固定）
     enable_starttls_auto: true,                 # TLS暗号化（固定
     open_timeout: 100,
