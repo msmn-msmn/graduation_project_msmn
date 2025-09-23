@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get "sub_tasks/complete"
   get "sub_tasks/restart"
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
+
   devise_for :users,
   path: "",
   path_names: {
