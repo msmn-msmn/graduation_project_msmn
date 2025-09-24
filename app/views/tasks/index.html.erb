@@ -6,27 +6,28 @@
       <h1 class="h2 text-dark mb-0">
         <i class="fas fa-tasks me-2"></i>タスクボード
       </h1>
-      
+
       <!-- 右側のボタングループ -->
       <div class="d-flex align-items-center gap-3">
         <!-- ユーザー情報表示 -->
         <% if user_signed_in? %>
           <div class="d-flex align-items-center">
-            <span class="text-muted me-3">
-              <i class="fas fa-user-circle me-1"></i>
-              <%= current_user.email %>
-            </span>
-            
+            <%= link_to users_path,
+                class: 'btn btn-outline-secondary me-3 d-inline-flex align-items-center',
+                title: 'ユーザー登録情報一覧へ' do %>
+            <span><%= current_user.username.presence || current_user.email %></span>
+        <% end %>
+
             <!-- ログアウトボタン -->
-            <%= button_to destroy_user_session_path, 
-                method: :delete, 
+            <%= button_to destroy_user_session_path,
+                method: :delete,
                 class: 'btn btn-outline-danger',
                 data: { confirm: 'ログアウトしますか？' } do %>
               <i class="fas fa-sign-out-alt me-2"></i>ログアウト
             <% end %>
           </div>
         <% end %>
-        
+
         <!-- 新しいタスク追加ボタン -->
         <%= link_to new_task_path, class: 'btn btn-primary btn-lg' do %>
           <i class="fas fa-plus me-2"></i>新しいタスクを追加
@@ -81,7 +82,7 @@
           <% @tasks.where(status: 'not_started').order(:priority, :created_at).each do |task| %>
             <%= render 'task_card', task: task %>
           <% end %>
-          
+
           <% if @tasks.where(status: 'not_started').empty? %>
             <div class="empty-state">
               <i class="fas fa-inbox text-muted mb-2"></i>
@@ -107,7 +108,7 @@
           <% @tasks.where(status: 'in_progress').order(:priority, :created_at).each do |task| %>
             <%= render 'task_card', task: task %>
           <% end %>
-          
+
           <% if @tasks.where(status: 'in_progress').empty? %>
             <div class="empty-state">
               <i class="fas fa-inbox text-muted mb-2"></i>
@@ -133,7 +134,7 @@
           <% @tasks.where(status: 'completed').order(:completed_at).each do |task| %>
             <%= render 'task_card', task: task %>
           <% end %>
-          
+
           <% if @tasks.where(status: 'completed').empty? %>
             <div class="empty-state">
               <i class="fas fa-inbox text-muted mb-2"></i>
