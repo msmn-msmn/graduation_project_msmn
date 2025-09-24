@@ -65,4 +65,13 @@
   <% else %>
     <div class="alert alert-info fs-6">ユーザーが見つかりません。</div>
   <% end %>
+
+  <!-- タスク一覧へ戻るボタン -->
+  <hr class="my-4">
+  <div class="d-flex justify-content-center">
+    <%= link_to tasks_path, class: "btn btn-outline-secondary btn-lg d-inline-flex align-items-center" do %>
+      <i class="fas fa-list-ul me-2"></i>
+      タスク一覧へ戻る
+    <% end %>
+  </div>
 </div>
