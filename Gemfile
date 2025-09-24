@@ -84,6 +84,8 @@ group :development do
   gem "foreman"
 
   gem "letter_opener_web"
+
+  gem "rexml", ">= 3.4.2"  # letter_opener_web依存関連gemのセキュリティ上の脆弱性のため3.4.2を下限とする
 end
 
 group :test do
