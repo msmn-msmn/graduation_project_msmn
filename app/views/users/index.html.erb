@@ -1,0 +1,77 @@
+<div class="container py-4">
+
+  <!-- 見出し & 操作 -->
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0">ユーザー登録情報</h1>
+    <div class="d-flex">
+      <%= link_to "プロフィールを編集",
+                  edit_user_path(current_user),
+                  class: "btn btn-primary btn-lg me-2" %>
+
+      <!-- Devise の退会（本人削除） -->
+      <%= button_to "退会する",
+                    user_registration_path,           # DELETE /users → Devise::Registrations#destroy
+                    method: :delete,
+                    form: { data: { turbo_confirm: "本当に退会しますか？この操作は元に戻せません。" } },
+                    class: "btn btn-outline-danger btn-lg" %>
+    </div>
+  </div>
+
+  <!-- フラッシュ -->
+  <% if flash.any? %>
+    <div class="mb-3">
+      <% flash.each do |type, message| %>
+        <% bs = { notice: "success", alert: "danger", error: "danger" }[type.to_sym] || "info" %>
+        <div class="alert alert-<%= bs %> fs-6 mb-0"><%= message %></div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if @users.present? %>
+    <% @users.each do |user| %>
+      <div class="card shadow-sm mb-4 border-0">
+        <div class="card-body p-4">
+          <!-- ラベル付きの情報グリッド -->
+          <div class="row g-3">
+            <div class="col-12 col-md-4">
+              <div class="border rounded-3 p-3 h-100">
+                <div class="text-muted small mb-1">ユーザー名</div>
+                <div class="fs-5 fw-semibold"><%= user.username %></div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-4">
+              <div class="border rounded-3 p-3 h-100">
+                <div class="text-muted small mb-1">メールアドレス</div>
+                <div class="fs-5 fw-semibold"><%= user.email %></div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-4">
+              <div class="border rounded-3 p-3 h-100">
+                <div class="text-muted small mb-1">1日の作業可能時間</div>
+                <div class="fs-5 fw-semibold">
+                  <%= user.daily_available_time.to_i %>分
+                  <% if user.daily_available_time.to_i > 0 %>
+                    <span class="text-muted ms-2 fs-6">（約<%= h %>時間<%= m %>分）</span>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="alert alert-info fs-6">ユーザーが見つかりません。</div>
+  <% end %>
+
+  <!-- タスク一覧へ戻るボタン -->
+  <hr class="my-4">
+  <div class="d-flex justify-content-center">
+    <%= link_to tasks_path, class: "btn btn-outline-secondary btn-lg d-inline-flex align-items-center" do %>
+      <i class="fas fa-list-ul me-2"></i>
+      タスク一覧へ戻る
+    <% end %>
+  </div>
+</div>
