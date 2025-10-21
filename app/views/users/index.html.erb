@@ -29,7 +29,10 @@
 
   <% if @users.present? %>
     <% @users.each do |user| %>
-      <div class="card shadow-sm mb-4 border-0">
+      <% minutes = user.daily_available_time.to_i
+       h = minutes / 60
+       m = minutes % 60 %>
+
         <div class="card-body p-4">
           <!-- ラベル付きの情報グリッド -->
           <div class="row g-3">
@@ -49,10 +52,22 @@
 
             <div class="col-12 col-md-4">
               <div class="border rounded-3 p-3 h-100">
+               <div class="text-muted small mb-1">パスワード</div>
+                  <div class="fs-5 fw-semibold d-flex align-items-center">
+                    <span class="me-3">●●●●●●●●</span>
+                  </div>
+                  <small class="text-muted d-block mt-2">
+                    ※ パスワード安全のため表示されません
+                  </small>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-4">
+              <div class="border rounded-3 p-3 h-100">
                 <div class="text-muted small mb-1">1日の作業可能時間</div>
                 <div class="fs-5 fw-semibold">
-                  <%= user.daily_available_time.to_i %>分
-                  <% if user.daily_available_time.to_i > 0 %>
+                  <%= minutes %>分
+                  <% if minutes > 0 %>
                     <span class="text-muted ms-2 fs-6">（約<%= h %>時間<%= m %>分）</span>
                   <% end %>
                 </div>
@@ -60,7 +75,7 @@
             </div>
           </div>
         </div>
-      </div>
+
     <% end %>
   <% else %>
     <div class="alert alert-info fs-6">ユーザーが見つかりません。</div>
