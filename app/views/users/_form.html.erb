@@ -13,6 +13,13 @@
   <div class="mb-3">
     <%= f.label :username, "ユーザー名", class: "form-label" %>
     <%= f.text_field :username, class: "form-control form-control-lg", required: true %>
+    <div class="form-text">※ 3文字以上のユーザー名にしてください。</div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :email, "メールアドレス", class: "form-label" %>
+    <%= f.email_field :email, class: "form-control form-control-lg" %>
+    <div class="form-text">※ 変更すると変更確定メールが送られます。</div>
   </div>
 
   <div class="mb-3">
@@ -21,12 +28,6 @@
           class: "form-control form-control-lg",
           min: 0, step: 5, placeholder: "例：90（分）" %>
     <div class="form-text">※ 分単位で入力（例：120 = 2時間）</div>
-  </div>
-
-  <div class="mb-3">
-    <%= f.label :email, "メールアドレス", class: "form-label" %>
-    <%= f.email_field :email, class: "form-control form-control-lg" %>
-    <div class="form-text">変更すると確認メールが送られる場合があります。</div>
   </div>
 
   <div class="d-flex gap-2 mt-4">
