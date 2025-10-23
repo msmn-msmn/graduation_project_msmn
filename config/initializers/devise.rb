@@ -28,7 +28,7 @@ Devise.setup do |config|
   config.mailer_sender = Settings.mailer.from
 
   # Configure the class responsible to send e-mails.
-  # config.mailer = 'Devise::Mailer'
+  config.mailer = 'CustomDeviseMailer'
 
   # Configure the parent class responsible to send e-mails.
   # config.parent_mailer = 'ActionMailer::Base'
@@ -130,7 +130,7 @@ Devise.setup do |config|
   # config.pepper = '5a15390de6629ba26c0fc31e24d525d0f2b3806c986f9bf3d06b661c569ee30551399e3089231d4c78d0406f22af410553817f2e0cb40831869293156b573ef8'
 
   # Send a notification to the original email when the user's email is changed.
-  # config.send_email_changed_notification = false
+  config.send_email_changed_notification = true
 
   # Send a notification email when the user's password is changed.
   # config.send_password_change_notification = false

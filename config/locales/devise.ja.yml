@@ -1,1 +1,9 @@
 ja:
+  devise:
+    mailer:
+      reconfirmation_instructions:
+        subject: "【確認】メールアドレス変更の確定"
+      email_change_requested:
+        subject: "【通知】メールアドレス変更の申請を受け付けました（確認待ち）"
+      email_changed:
+        subject: "【完了】メールアドレスを変更しました"
