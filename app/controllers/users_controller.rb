@@ -32,6 +32,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:username, :daily_available_time)
+    params.require(:user).permit(:username, :daily_available_time, :email)
   end
 end
