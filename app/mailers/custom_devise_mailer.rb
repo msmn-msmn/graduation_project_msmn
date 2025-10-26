@@ -7,7 +7,7 @@ class CustomDeviseMailer  < Devise::Mailer
       opts[:subject]       = I18n.t('devise.mailer.reconfirmation_instructions.subject')
     else
       # 通常の“新規登録”確認
-      opts[:template_name] = 'confirmation_instructions'
+      opts[:template_name] = 'reconfirmation_instructions'
     end
     super
   end
@@ -17,9 +17,6 @@ class CustomDeviseMailer  < Devise::Mailer
     if record.respond_to?(:unconfirmed_email?) && record.unconfirmed_email?
       # 申請受付（確認待ち）
       opts[:subject] = I18n.t('devise.mailer.email_change_requested.subject')
-    else
-      # 確定後（完了通知）
-      opts[:subject] = I18n.t('devise.mailer.email_changed.subject')
     end
     super
   end
