@@ -1,0 +1,48 @@
+<p>こんにちは <%= (@resource.respond_to?(:username) && @resource.username.present?) ? @resource.username : (@resource.unconfirmed_email || @resource.email) %> さん。</p>
+
+<% if @resource.respond_to?(:pending_reconfirmation?) && @resource.pending_reconfirmation? %>
+  <!-- メールアドレス変更の「確認メール」（未確定） -->
+  <p>
+    あなたのアカウントのメールアドレスを
+    <strong><%= @resource.unconfirmed_email %></strong>
+    に変更する申請を受け付けました。
+  </p>
+  <p>新しいメールアドレスの確認をお願いします。</p>
+  <p>
+    下記のリンクをクリックすると、この変更が確定され、
+    ログイン用メールアドレスが新しいものに切り替わります。
+  </p>
+  <p>
+    <%= link_to 'メールアドレスの変更を確定する',
+                confirmation_url(@resource, confirmation_token: @token),
+                style: 'display:inline-block;padding:10px 16px;background:#0d6efd;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:bold;' %>
+  </p>
+  <p style="font-size: 0.9rem; color: #555;">
+    ボタンが表示されない／押せない場合はこちらから変更を確定できます：<br>
+    <%= confirmation_url(@resource, confirmation_token: @token) %>
+  </p>
+  <p style="font-size: 0.9rem; color: #555;">
+    ※ この操作を完了するまでは、現在のメールアドレスはそのまま使用されます。<br>
+    ※ このメールに心当たりがない場合は、リンクをクリックせず破棄してください。あなたのメールアドレスは変更されません。
+  </p>
+
+<% else %>
+  <!-- 新規登録時の「アドレス確認メール」 -->
+  <p>アカウント作成ありがとうございます。メールアドレスの確認をお願いします。</p>
+  <p>
+    下記のリンクをクリックすると、アカウントが有効化されます。
+  </p>
+  <p>
+    <%= link_to 'メールアドレスを確認してアカウントを有効化する',
+                confirmation_url(@resource, confirmation_token: @token),
+                style: 'display:inline-block;padding:10px 16px;background:#0d6efd;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:bold;' %>
+  </p>
+  <p style="font-size: 0.9rem; color: #555;">
+    ボタンが表示されない／押せない場合はこちらから有効化できます：<br>
+    <%= confirmation_url(@resource, confirmation_token: @token) %>
+  </p>
+<% end %>
+
+<p style="font-size: 0.9rem; color: #555;">
+  このメールは自動送信されています。
+</p>
