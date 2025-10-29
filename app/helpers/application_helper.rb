@@ -8,4 +8,12 @@ module ApplicationHelper
       current_user.confirmation_period_valid?
       current_user.unconfirmed_email.present?
   end
+
+  # メール送信のレート制限（連打対策）
+  def can_resend_confirmation_email?(user)
+    cooldown_seconds = 300
+    return true if user.confirmation_sent_at.blank?
+
+    Time.current - user.confirmation_sent_at >= cooldown_seconds
+  end
 end
