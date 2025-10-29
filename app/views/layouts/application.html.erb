@@ -19,7 +19,12 @@
   </head>
 
   <body>
-     <!-- フラッシュメッセージを追加 -->
+    <!-- 確認メール未確認バナー: 有効期間内かつ未確認のときだけ表示 %>
+    <% if show_pending_email_banner? %>
+      <%= render "layouts/header.html" %>
+    <% end %>
+
+    <!-- フラッシュメッセージを追加 -->
     <% if notice %>
       <p class="notice"><%= notice %></p>
     <% end %>
