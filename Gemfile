@@ -52,7 +52,7 @@ gem "rails-i18n"
 
 gem "devise-i18n"
 
-gem "rack", "~> 3.1.18"
+gem "rack", "~> 3.2.3"
 
 gem "uri", "~> 1.0.4"
 
