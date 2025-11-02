@@ -9,8 +9,9 @@ module ApplicationHelper
                         user.pending_reconfirmation?
 
     # トークンの有効期間内か？（リンクの有効性）
-    return false unless user.respond_to?(:confirmation_period_expired?) &&
-                        user.confirmation_period_expired?
+    return false if user.respond_to?(:confirmation_token_valid?) &&
+                        user.confirmation_token_valid?
+                        
     current_user.unconfirmed_email.present?
   end
 
@@ -20,5 +21,15 @@ module ApplicationHelper
     return true if user.confirmation_sent_at.blank?
 
     Time.current - user.confirmation_sent_at >= cooldown_seconds
+  end
+
+  # トークンの「有効期間内」かどうかを返す（true=期限内/有効）
+  def confirmation_token_valid?(user)
+    validity_period = Devise.confirm_within            # 例: 3.days / nil(無期限)
+    return true if validity_period.nil?                # 無期限なら常に表示
+
+    sent_at = user.confirmation_sent_at
+    return false if sent_at.blank?                        # 送信記録の有無
+    sent_at >= validity_period.ago                     # ← ここが「有効期間内」
   end
 end
