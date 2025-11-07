@@ -11,7 +11,7 @@ module ApplicationHelper
     # トークンの有効期間内か？（リンクの有効性）
     return false if user.respond_to?(:confirmation_token_valid?) &&
                         user.confirmation_token_valid?
-                        
+
     current_user.unconfirmed_email.present?
   end
 
