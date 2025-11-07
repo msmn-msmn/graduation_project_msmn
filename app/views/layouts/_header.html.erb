@@ -1,0 +1,38 @@
+<!-- メールアドレス変更申請時　確認メール未確認警告バナー -->
+<div
+  class="alert alert-warning border-0 rounded-0 mb-0 py-2
+        d-flex flex-column flex-md-row align-items-center justify-content-center gap-2 text-center"
+  role="alert">
+
+  <div class="fw-bold text-dark">
+    <i class="bi bi-exclamation-triangle-fill me-1"></i>
+    メールアドレスの確認が完了していません
+  </div>
+
+  <div class="small text-dark">
+    新しいメールアドレス
+    <span class="fw-bold"><%= current_user.unconfirmed_email %></span>
+    は、まだ有効化されていません。<br class="d-md-none">
+    送信された確認メール内のリンクをクリックして完了してください。
+  </div>
+
+  <div>
+    <%= button_to "確認メールを再送する",
+        user_confirmation_path,
+        method: :post,
+        params: {
+          user: {
+            email: current_user.unconfirmed_email.presence || current_user.email
+          }
+        },
+        class: "btn btn-sm btn-outline-dark",
+        disabled: !can_resend_confirmation_email?(current_user),
+        form: {
+          data: {
+            turbo_confirm: (!can_resend_confirmation_email?(current_user) ?
+              "短時間に複数回送信はできません。しばらく待ってから再度お試しください。" :
+              nil)
+          }
+        } %>
+  </div>
+</div>
