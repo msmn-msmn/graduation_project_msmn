@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_user, only: %i[show edit update destroy]
+  before_action :set_user, only: %i[show  destroy]
 
   def index
     @users = User.where(id: current_user.id)
@@ -10,18 +10,6 @@ class UsersController < ApplicationController
     # @user は before_action で設定済み
   end
 
-  def edit
-    # @user は before_action で設定済み
-  end
-
-  def update
-    if @user.update(user_params)
-      redirect_to users_path, notice: "プロフィールを更新しました"
-    else
-      render :edit
-    end
-  end
-
   def destroy
   end
 
@@ -29,9 +17,5 @@ class UsersController < ApplicationController
 
   def set_user
     @user = current_user
-  end
-
-  def user_params
-    params.require(:user).permit(:username, :daily_available_time, :email)
   end
 end
