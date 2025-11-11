@@ -1,0 +1,29 @@
+<div class="container py-4">
+  <h1 class="h3 mb-4">プロフィール編集</h1>
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+      <div class="border rounded-3 p-4 bg-white">
+        <%= render "form" %>
+        <script>
+          document.addEventListener("turbo:load", function () {
+            function setupToggle(inputId, buttonId) {
+              var input = document.getElementById(inputId);
+              var button = document.getElementById(buttonId);
+              if (!input || !button) return;
+
+              button.addEventListener("click", function () {
+                var isHidden = input.type === "password";
+                input.type = isHidden ? "text" : "password";
+                button.textContent = isHidden ? "非表示" : "表示";
+              });
+            }
+
+            setupToggle("current_password", "toggle_current_password");
+            setupToggle("new_password", "toggle_new_password");
+            setupToggle("new_password_confirmation", "toggle_new_password_confirmation");
+          });
+        </script>
+      </div>
+    </div>
+  </div>
+</div>

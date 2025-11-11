@@ -8,6 +8,8 @@ ja:
     attributes:
       user:
         username: ユーザー名
+        email: メールアドレス
+        daily_available_time: 1日の作業可能時間（分）
       task:
         name: タスク名
         description_for_ai: 分解用説明

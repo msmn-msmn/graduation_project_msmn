@@ -12,9 +12,12 @@ Rails.application.routes.draw do
     sign_in: "login",
     sign_out: "logout",
     sign_up: "signup"
+  },
+  controllers: {
+  registrations: "users/registrations"
   }
 
-  resources :users, only: %i[index show edit update destroy] # new,createはDeviseから提供される
+  resources :users, only: %i[index show destroy] # new,createはDeviseから提供される
   # タスク関連（ネストしたサブタスクを含む）
   resources :tasks do
     collection do
