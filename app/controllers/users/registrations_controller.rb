@@ -23,4 +23,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
       :current_password
     )
   end
+
+  def after_update_path_for(resource)
+    users_path # プロフィール画面へ遷移
+  end
 end
