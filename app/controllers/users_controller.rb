@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_user, only: %i[show  destroy]
+  before_action :set_user, only: %i[show destroy]
 
   def index
     @users = User.where(id: current_user.id)
