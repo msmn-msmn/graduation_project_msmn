@@ -68,11 +68,17 @@
 
   <div class="mb-3">
     <%= f.label :password_confirmation, "新しいパスワード（確認）", class: "form-label" %>
-    <%= f.password_field :password_confirmation,
-          class: "form-control form-control-lg",
-          autocomplete: "new-password" %>
+    <div class="input-group">
+      <%= f.password_field :password_confirmation,
+            class: "form-control form-control-lg",
+            autocomplete: "new-password",
+            id: "new_password_confirmation" %>
+      <button type="button" class="btn btn-outline-secondary" id="toggle_new_password_confirmation">
+          表示
+      </button>
+    </div>
   </div>
-  
+
   <div class="d-flex gap-2 mt-4">
     <%= f.submit "保存する", class: "btn btn-primary btn-lg" %>
     <%= link_to "キャンセル", users_path, class: "btn btn-outline-secondary btn-lg" %>
