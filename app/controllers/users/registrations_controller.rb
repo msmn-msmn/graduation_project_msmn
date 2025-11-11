@@ -3,9 +3,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   protected
 
-  # パスワード変更を含む更新時、current_passwordを要求する
+  # プロフ＆パスワード両対応のアップデート処理
   def update_resource(resource, params)
     if params[:password].present?
+      # パスワード変更を含む場合：現在のパスワード必須
       resource.update_with_password(params)
     else
       # パスワード以外の変更は current_password なしで許可
@@ -24,7 +25,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
     )
   end
 
+  # 更新成功後の遷移先（プロフ詳細へ）
   def after_update_path_for(resource)
-    users_path # プロフィール画面へ遷移
+    users_path
   end
 end
