@@ -94,6 +94,10 @@ class TasksController < ApplicationController
   def discard
     task = current_user.tasks.find(params[:id])
     task.destroy!
+
+    # 破棄したタスクページの履歴を残さない
+    response.set_header("Turbo-Visit-Action", "replace")
+
     redirect_to new_task_path, notice: "下書きを破棄しました。"
   end
 
