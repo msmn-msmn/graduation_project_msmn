@@ -105,6 +105,8 @@ class TasksController < ApplicationController
 
   def set_task
     @task = current_user.tasks.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+    redirect_to new_task_path, alert: "その下書きは見つかりません（破棄済みの可能性があります）。"
   end
 
   # ダミーデータ設定メソッド
