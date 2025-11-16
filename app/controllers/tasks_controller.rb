@@ -94,13 +94,20 @@ class TasksController < ApplicationController
   def discard
     task = current_user.tasks.find(params[:id])
     task.destroy!
-    redirect_to new_task_path, notice: "下書きを破棄しました。"
+
+    # 破棄したタスクページの履歴を残さない
+    response.set_header("Turbo-Visit-Action", "replace")
+
+    redirect_to new_task_path, status: :see_other,
+                               notice: "下書きを破棄しました。"
   end
 
   private
 
   def set_task
     @task = current_user.tasks.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+    redirect_to new_task_path, alert: "その下書きは見つかりません（破棄済みの可能性があります）。"
   end
 
   # ダミーデータ設定メソッド

@@ -95,7 +95,7 @@
             <%= sf.select :status,
                   [["未着手","not_started"],["作業中","in_progress"],["完了","completed"]],
                   {}, { class: "form-select mb-2" } %>
-            <!-- ★ 削除は hidden の _destroy を使う（チェックボックス廃止） -->
+            <!-- 削除は hidden の _destroy を使う（チェックボックス廃止） -->
             <%= sf.hidden_field :_destroy %>
             <!-- （任意）並び順を保存したい場合 -->
             <%= sf.hidden_field :position, value: sf.object.try(:position) %>
@@ -203,7 +203,9 @@
             <div class="d-flex justify-content-between mt-3">
               <%= link_to "戻る（下書きを破棄）",
                 discard_task_path(@task),
-                data: { turbo_method: :delete, turbo_confirm: "下書きを破棄します。よろしいですか？" },
+                data: { turbo_method: :delete, turbo_confirm: "下書きを破棄します。よろしいですか？",
+                        turbo_action: "replace"
+                      },
                 class: "btn btn-secondary" %>
               <%= form.submit "タスクを登録", class: "btn btn-success btn-lg" %>
             </div>

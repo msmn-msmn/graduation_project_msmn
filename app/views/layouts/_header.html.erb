@@ -16,6 +16,10 @@
     送信された確認メール内のリンクをクリックして完了してください。
   </div>
 
+  <!-- 右上の×ボタン -->
+  <button type="button"
+          class="btn-close position-absolute end-0 top-50 translate-middle-y me-2"
+          data-bs-dismiss="alert" aria-label="閉じる"></button>
   <div>
     <%= button_to "確認メールを再送する",
         user_confirmation_path,

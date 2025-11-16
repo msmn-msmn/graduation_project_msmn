@@ -1,0 +1,17 @@
+<% flash.each do |type, message| %>
+  <% level = { notice: "success", alert: "warning", error: "danger" }[type.to_sym] || "info" %>
+
+  <div class="alert alert-<%= level %> alert-dismissible fade show sticky-top rounded-0 mb-0 shadow-sm"
+       role="alert" aria-live="polite" aria-atomic="true" style="z-index:1060">
+
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+    <strong>お知らせ：</strong> <%= message %>
+
+    <%# 文言に応じて行動導線を追加：破棄済み→新規作成へ %>
+    <% if type.to_sym == :alert && message.include?("下書きは見つかりません") %>
+      <%= link_to "新しく作成する", new_task_path, class: "alert-link ms-2" %>
+    <% end %>
+
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="閉じる"></button>
+  </div>
+<% end %>
