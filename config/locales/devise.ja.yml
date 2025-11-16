@@ -1,5 +1,12 @@
 ja:
   devise:
+    registrations:
+      signed_up_but_unconfirmed: "確認メールを送信しました。メールのリンクから登録を完了してください。"
+    confirmations:
+      send_instructions: "確認メールを送信しました。メールのリンクから登録を完了してください。"
+      send_paranoid_instructions: "確認メールを送信しました。メールのリンクから登録を完了してください。"
+    failure:
+      unconfirmed: "アカウントの確認が必要です。確認メールのリンクから登録を完了してください。"
     mailer:
       reconfirmation_instructions:
         subject: "【確認】メールアドレス変更の確定"

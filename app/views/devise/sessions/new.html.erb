@@ -80,7 +80,7 @@
 
 <!-- パスワード表示切り替え（登録画面と同等の操作感） -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('turbo:load', function() {
   const toggleBtn = document.getElementById('loginPasswordToggle');
   const pwdField = document.querySelector('input[name="<%= resource_name %>[password]"]');
   const icon = document.getElementById('loginPasswordIcon');
