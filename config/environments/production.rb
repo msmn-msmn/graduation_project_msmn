@@ -1,5 +1,5 @@
 require "active_support/core_ext/integer/time"
-canonical = ENV.fetch("CANONICAL_HOST", "www.cathand-schedule.com")
+canonical = ENV["CANONICAL_HOST"].presence || "www.cathand-schedule.com"
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -22,7 +22,7 @@ Rails.application.configure do
   # config.require_master_key = true
 
   # Disable serving static files from `public/`, relying on NGINX/Apache to do so instead.
-  # config.public_file_server.enabled = false
+  # config.public_file_server.enabled = falsegacm ''
 
   # Compress CSS using a preprocessor.
   # config.assets.css_compressor = :sass
