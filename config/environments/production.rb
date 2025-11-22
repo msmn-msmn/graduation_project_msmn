@@ -1,4 +1,5 @@
 require "active_support/core_ext/integer/time"
+canonical = ENV.fetch('CANONICAL_HOST', 'www.cathand-schedule.com')
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -54,6 +55,13 @@ Rails.application.configure do
   # Skip http-to-https redirect for the default health check endpoint.
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
 
+  # カスタムドメイン用ミドルウェアを“先頭”に差し込む
+  config.middleware.insert_before 0, Rack::CanonicalHost, canonical
+
+  # Host 許可（apex で受けてから www にリダイレクトするため両方許可）
+  config.hosts << 'cathand-schedule.com'
+  config.hosts << 'www.cathand-schedule.com'
+
   # Log to STDOUT by default
   config.logger = ActiveSupport::Logger.new(STDOUT)
     .tap  { |logger| logger.formatter = ::Logger::Formatter.new }
@@ -101,9 +109,10 @@ Rails.application.configure do
 
   # デォルトURL設定
   config.action_mailer.default_url_options = {
-    host: Settings.default_url_options.host,
+    host: canonical,
     protocol: Settings.default_url_options.protocol
   }
+  Rails.application.routes.default_url_options[:host] = canonical
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
