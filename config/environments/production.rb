@@ -1,5 +1,5 @@
 require "active_support/core_ext/integer/time"
-canonical = ENV.fetch('CANONICAL_HOST', 'www.cathand-schedule.com')
+canonical = ENV.fetch("CANONICAL_HOST", "www.cathand-schedule.com")
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -59,8 +59,8 @@ Rails.application.configure do
   config.middleware.insert_before 0, Rack::CanonicalHost, canonical
 
   # Host 許可（apex で受けてから www にリダイレクトするため両方許可）
-  config.hosts << 'cathand-schedule.com'
-  config.hosts << 'www.cathand-schedule.com'
+  config.hosts << "cathand-schedule.com"
+  config.hosts << "www.cathand-schedule.com"
 
   # Log to STDOUT by default
   config.logger = ActiveSupport::Logger.new(STDOUT)
