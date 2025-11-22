@@ -54,7 +54,7 @@ gem "devise-i18n"
 
 gem "rack", "~> 3.1.18"
 
-gem "uri", "~> 1.0.4"
+gem "uri", "~> 1.1.1"
 
 gem "rack-canonical-host"
 
