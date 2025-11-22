@@ -56,6 +56,8 @@ gem "rack", "~> 3.1.18"
 
 gem "uri", "~> 1.0.4"
 
+gem "rack-canonical-host"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
