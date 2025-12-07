@@ -1,6 +1,7 @@
 default_url_options:
-  host: 'graduation-project-msmn.onrender.com'  # Renderのドメイン
+  host: 'www.cathand-schedule.com'  # Google Workspaceのドメイン
   protocol: 'https'
 
 mailer:
-  from: 'dev-noreply@yourapp.com'
+  from: 'noreply@cathand-schedule.com'
+  reply_to: "support@cathand-schedule.com"
