@@ -94,13 +94,13 @@ Rails.application.configure do
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   config.action_mailer.raise_delivery_errors = true
 
-  # Gmail SMTP設定
+  # SMTPサーバーの設定（Google Workspace / Gmail）
   config.action_mailer.smtp_settings = {
-    address: "smtp.gmail.com",                  # SMTPサーバーのアドレス（固定）
+    address: "smtp-relay.gmail.com",                  # SMTPサーバーのアドレス（固定）
     port: 587,                                  # SMTPサーバーのポート（固定）
-    domain: "gmail.com",                        # ドメイン名
-    user_name: ENV["GMAIL_ADDRESS"],              # 認証用メールアドレス（変数）
-    password: ENV["GMAIL_PASSWORD"],             # アプリパスワード（変数）
+    domain: ENV.fetch("SMTP_DOMAIN", "cathand-schedule.com"),                        # ドメイン名
+    user_name: ENV["SMTP_USER"],              # 認証用メールアドレス（変数）
+    password: ENV["SMTP_PASSWORD"],             # アプリパスワード（変数）
     authentication: "plain",                    # 認証方式（固定）
     enable_starttls_auto: true,                 # TLS暗号化（固定
     open_timeout: 100,
@@ -113,6 +113,12 @@ Rails.application.configure do
     protocol: Settings.default_url_options.protocol
   }
   Rails.application.routes.default_url_options[:host] = canonical
+
+  # 既定のFrom/Reply-To（通知は noreply、返信は support へ）
+  config.action_mailer.default_options = {
+    from:     "noreply@cathand-schedule.com",
+    reply_to: "support@cathand-schedule.com"
+  }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
